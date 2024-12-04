@@ -78,3 +78,16 @@ func (s *TenantService) Delete(ctx context.Context, id string) error {
 
 	return nil
 }
+
+func (s *TenantService) GetUsage(ctx context.Context, id string) (*models.TenantUsage, error) {
+	response := models.Response{}
+	response.Data = &models.TenantUsage{}
+
+	err := s.client.DoParsed(ctx, "GET", tenantEndpoint+"/"+id+"/usage", nil, &response)
+	if err != nil {
+		return nil, err
+	}
+
+	usage := response.Data.(*models.TenantUsage)
+	return usage, nil
+}

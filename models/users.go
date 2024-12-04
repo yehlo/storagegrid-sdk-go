@@ -22,13 +22,13 @@ type User struct {
 }
 
 // The shortname is the portion of the unique name after the slash
-func (o *User) GetShortname() string {
-	if o == nil {
+func (u *User) GetShortname() string {
+	if u == nil {
 		return ""
 	}
 
 	// split the unique name by the slash
-	parts := strings.Split(o.UniqueName, "/")
+	parts := strings.Split(u.UniqueName, "/")
 	// return the last part
 	return parts[len(parts)-1]
 }

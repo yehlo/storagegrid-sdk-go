@@ -15,6 +15,7 @@ type GridClient struct {
 
 	// Services
 	Tenant *services.TenantService
+	Health *services.HealthService
 }
 
 func NewGridClient(options ...ClientOption) (*GridClient, error) {
@@ -28,5 +29,6 @@ func NewGridClient(options ...ClientOption) (*GridClient, error) {
 	return &GridClient{
 		client: c,
 		Tenant: services.NewTenantService(c),
+		Health: services.NewHealthService(c),
 	}, nil
 }
