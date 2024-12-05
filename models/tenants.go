@@ -2,9 +2,9 @@ package models
 
 type Tenant struct {
 	// the descriptive name specified for the account (This name is for display only and might not be unique.)
-	Name string `json:"name,omitempty"`
+	Name *string `json:"name,omitempty"`
 	// Additional identifying information for the tenant account, such as an email address. This information is not shown in the Tenant Manager.
-	Description string `json:"description,omitempty"`
+	Description *string `json:"description,omitempty"`
 	// the high-level features enabled for this account, such as S3 or Swift protocols (Accounts must have the \"management\" capability if users will sign into the Tenant Manager.)
 	Capabilities     []string                     `json:"capabilities,omitempty"`
 	SynchronizeRules *AccountNoIdSynchronizeRules `json:"synchronizeRules,omitempty"`
@@ -30,9 +30,9 @@ type AccountNoIdSynchronizeRules struct {
 // PolicyAccount settings for the tenant account
 type TenantPolicy struct {
 	// whether the tenant account should configure its own identity source. If false, the tenant uses the grid-wide identity source.
-	UseAccountIdentitySource *bool `json:"useAccountIdentitySource"`
+	UseAccountIdentitySource bool `json:"useAccountIdentitySource"`
 	// whether a tenant can use platform services features such as CloudMirror. These features send data to an external service that is specified using a StorageGRID endpoint.
-	AllowPlatformServices *bool `json:"allowPlatformServices"`
+	AllowPlatformServices bool `json:"allowPlatformServices"`
 	// whether a tenant can use the S3 SelectObjectContent API to filter and retrieve object data.
 	AllowSelectObjectContent *bool `json:"allowSelectObjectContent,omitempty"`
 	// Connection IDs of tenants. When specified, cross-grid replication of this account and the buckets in this account will be allowed.
