@@ -21,7 +21,7 @@ func NewHealthService(client HTTPClient) *HealthService {
 func (s *HealthService) Get(ctx context.Context) (*models.Health, error) {
 	response := models.Response{}
 	response.Data = &models.Health{}
-	err := s.client.DoParsed(ctx, "GET", healthEndpoint+"/", nil, &response)
+	err := s.client.DoParsed(ctx, "GET", healthEndpoint, nil, &response)
 	if err != nil {
 		return nil, err
 	}
