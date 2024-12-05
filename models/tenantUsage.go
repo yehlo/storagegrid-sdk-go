@@ -5,7 +5,7 @@ import "time"
 // TenantUsagerepresents the overall usage of any tenant
 type TenantUsage struct {
 	CalculationTime *time.Time     `json:"calculationTime,omitempty"` // The time the calculation was performed.
-	ObjectCount     *int           `json:"objectCount,omitempty"`     // Total number of objects.
+	ObjectCount     *int64         `json:"objectCount,omitempty"`     // Total number of objects.
 	DataBytes       *int64         `json:"dataBytes,omitempty"`       // Total size of data in bytes.
 	Buckets         []*BucketStats `json:"buckets,omitempty"`         // List of bucket-specific statistics.
 }
