@@ -5,10 +5,11 @@ import (
 )
 
 type Credentials struct {
-	Username  string `json:"username,omitempty"`
-	Password  string `json:"password,omitempty"`
-	Cookie    bool   `json:"cookie,omitempty"`
-	CsrfToken bool   `json:"csrfToken,omitempty"`
+	Username  string  `json:"username,omitempty"`
+	Password  string  `json:"password,omitempty"`
+	AccountId *string `json:"accountId,omitempty"`
+	Cookie    bool    `json:"cookie,omitempty"`
+	CsrfToken bool    `json:"csrfToken,omitempty"`
 }
 
 type AuthorizationToken struct {
