@@ -45,6 +45,19 @@ func (s *TenantUserService) GetById(ctx context.Context, id string) (*models.Use
 	return user, nil
 }
 
+func (s *TenantUserService) GetByName(ctx context.Context, name string) (*models.User, error) {
+	response := models.Response{}
+	response.Data = &models.User{}
+	err := s.client.DoParsed(ctx, "GET", tenantUserEndpoint+"/user/"+name, nil, &response)
+	if err != nil {
+		return nil, err
+	}
+
+	user := response.Data.(*models.User)
+
+	return user, nil
+}
+
 func (s *TenantUserService) Create(ctx context.Context, user *models.User) (*models.User, error) {
 	// enforce user/ prefix on user.uniqueName if manually created
 	if !strings.HasPrefix(user.UniqueName, "user/") {

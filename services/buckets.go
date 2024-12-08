@@ -8,7 +8,8 @@ import (
 )
 
 const (
-	bucketEndpoint string = "/org/containers"
+	bucketEndpoint      string = "/org/containers"
+	tenantUsageEndpoint string = "/org/usage"
 )
 
 type BucketService struct {
@@ -33,6 +34,7 @@ func (s *BucketService) List(ctx context.Context) (*[]models.Bucket, error) {
 }
 
 func (s *BucketService) GetByName(ctx context.Context, name string) (*models.Bucket, error) {
+	// the bucket endpoint doesn't have a simple get by name, so we have to list all buckets and find the one we want
 	buckets, err := s.List(ctx)
 	if err != nil {
 		return nil, err
@@ -58,6 +60,25 @@ func (s *BucketService) Create(ctx context.Context, bucket *models.Bucket) (*mod
 	bucket = response.Data.(*models.Bucket)
 
 	return bucket, nil
+}
+
+func (s *BucketService) GetUsage(ctx context.Context, name string) (*models.BucketStats, error) {
+	response := models.Response{}
+	response.Data = &models.TenantUsage{}
+	err := s.client.DoParsed(ctx, "GET", tenantUsageEndpoint, nil, &response)
+	if err != nil {
+		return nil, err
+	}
+
+	tenantUsage := response.Data.(*models.TenantUsage)
+
+	for _, bucket := range tenantUsage.Buckets {
+		if bucket.Name == &name {
+			return bucket, nil
+		}
+	}
+
+	return nil, fmt.Errorf("usage for bucket with name %s not found", name)
 }
 
 func (s *BucketService) Delete(ctx context.Context, name string) error {

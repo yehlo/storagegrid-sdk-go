@@ -45,6 +45,19 @@ func (s *TenantGroupService) GetById(ctx context.Context, id string) (*models.Te
 	return group, nil
 }
 
+func (s *TenantGroupService) GetByName(ctx context.Context, name string) (*models.TenantGroup, error) {
+	response := models.Response{}
+	response.Data = &models.User{}
+	err := s.client.DoParsed(ctx, "GET", tenantGroupEndpoint+"/group/"+name, nil, &response)
+	if err != nil {
+		return nil, err
+	}
+
+	group := response.Data.(*models.TenantGroup)
+
+	return group, nil
+}
+
 func (s *TenantGroupService) Create(ctx context.Context, group *models.TenantGroup) (*models.TenantGroup, error) {
 	// enforce group/ prefix on group.uniqueName if manually created
 	if !strings.HasPrefix(group.UniqueName, "group/") {

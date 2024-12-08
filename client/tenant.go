@@ -18,6 +18,7 @@ type TenantClient struct {
 	S3AccessKeys *services.S3AccessKeyService
 	Users        *services.TenantUserService
 	Groups       *services.TenantGroupService
+	Region       *services.RegionService
 }
 
 func NewTenantClient(options ...ClientOption) (*TenantClient, error) {
@@ -34,5 +35,6 @@ func NewTenantClient(options ...ClientOption) (*TenantClient, error) {
 		S3AccessKeys: services.NewS3AccessKeyService(c),
 		Users:        services.NewTenantUserService(c),
 		Groups:       services.NewTenantGroupService(c),
+		Region:       services.NewRegionTenantService(c),
 	}, nil
 }
