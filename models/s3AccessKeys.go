@@ -7,7 +7,7 @@ type S3AccessKey struct {
 	// A unique identifier for the S3 credential pair (automatically assigned when an access key is created)
 	Id *string `json:"id,omitempty"`
 	// Storage Tenant Account ID
-	AccountId *string `json:"accountId.omitempty"`
+	AccountId *string `json:"accountId,omitempty"`
 	// Obfuscated access key
 	DisplayName *string `json:"displayName,omitempty"`
 	// Contains the user name and account ID (generated automatically)
