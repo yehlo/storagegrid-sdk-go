@@ -73,7 +73,7 @@ func (s *BucketService) GetUsage(ctx context.Context, name string) (*models.Buck
 	tenantUsage := response.Data.(*models.TenantUsage)
 
 	for _, bucket := range tenantUsage.Buckets {
-		if bucket.Name == &name {
+		if *bucket.Name == name {
 			return bucket, nil
 		}
 	}
