@@ -14,9 +14,11 @@ type GridClient struct {
 	client *Client
 
 	// Services
-	Tenant *services.TenantService
-	Health *services.HealthService
-	Region *services.RegionService
+	Tenant  *services.TenantService
+	Health  *services.HealthService
+	Region  *services.RegionService
+	HAGroup *services.HAGroupService
+	Gateway *services.GatewayConfigService
 }
 
 func NewGridClient(options ...ClientOption) (*GridClient, error) {
@@ -28,9 +30,11 @@ func NewGridClient(options ...ClientOption) (*GridClient, error) {
 	c.baseURL = c.baseURL.ResolveReference(&url.URL{Path: gridAPI})
 
 	return &GridClient{
-		client: c,
-		Tenant: services.NewTenantService(c),
-		Health: services.NewHealthService(c),
-		Region: services.NewRegionGridService(c),
+		client:  c,
+		Tenant:  services.NewTenantService(c),
+		Health:  services.NewHealthService(c),
+		Region:  services.NewRegionGridService(c),
+		HAGroup: services.NewHAGroupService(c),
+		Gateway: services.NewGatewayConfigService(c),
 	}, nil
 }
