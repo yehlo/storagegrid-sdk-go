@@ -85,10 +85,10 @@ func (s *GatewayConfigService) DeleteGatewayConfig(ctx context.Context, id strin
 	return nil
 }
 
-func (s *GatewayConfigService) GetGatewayServerConfig(ctx context.Context, id string) (*models.GWServerConfig, error) {
+func (s *GatewayConfigService) GetGatewayServerConfig(ctx context.Context, gatewayID string) (*models.GWServerConfig, error) {
 	response := models.Response{}
 	response.Data = &models.GWServerConfig{}
-	err := s.client.DoParsed(ctx, "GET", getServerConfigEndpoint(id), nil, &response)
+	err := s.client.DoParsed(ctx, "GET", getServerConfigEndpoint(gatewayID), nil, &response)
 	if err != nil {
 		return nil, err
 	}
@@ -98,10 +98,10 @@ func (s *GatewayConfigService) GetGatewayServerConfig(ctx context.Context, id st
 	return gatewayServerConfig, nil
 }
 
-func (s *GatewayConfigService) UpdateGatewayServerConfig(ctx context.Context, gatewayServerConfig *models.GWServerConfig) (*models.GWServerConfig, error) {
+func (s *GatewayConfigService) UpdateGatewayServerConfig(ctx context.Context, gatewayID string, gatewayServerConfig *models.GWServerConfig) (*models.GWServerConfig, error) {
 	response := models.Response{}
 	response.Data = &models.GWServerConfig{}
-	err := s.client.DoParsed(ctx, "PUT", gatewayConfigEndpoint, gatewayServerConfig, &response)
+	err := s.client.DoParsed(ctx, "PUT", getServerConfigEndpoint(gatewayID), gatewayServerConfig, &response)
 	if err != nil {
 		return nil, err
 	}
