@@ -34,9 +34,11 @@ type ManagementInterfaces struct {
 }
 
 type GWServerConfig struct {
-	DefaultServiceType *string            `json:"defaultServiceType,omitempty"`
-	CertSource         *string            `json:"certSource,omitempty"`
-	PlaintextCertData  *PlaintextCertData `json:"plaintextCertData,omitempty"`
+	DefaultServiceType     *string            `json:"defaultServiceType,omitempty"`
+	AccountRestrictionMode *string            `json:"accountRestrictionMode,omitempty"`
+	AccountRestrictions    *[]string          `json:"accountRestrictions,omitempty"`
+	CertSource             *string            `json:"certSource,omitempty"`
+	PlaintextCertData      *PlaintextCertData `json:"plaintextCertData,omitempty"`
 }
 
 type PlaintextCertData struct {
@@ -51,9 +53,10 @@ type Metadata struct {
 }
 
 type ServerCertificateDetails struct {
-	Subject         *string       `json:"subject,omitempty"`
-	Issuer          *string       `json:"issuer,omitempty"`
-	SerialNumber    *string       `json:"serialNumber,omitempty"`
+	Subject      *string `json:"subject,omitempty"`
+	Issuer       *string `json:"issuer,omitempty"`
+	SerialNumber *string `json:"serialNumber,omitempty"`
+
 	NotBefore       *string       `json:"notBefore,omitempty"`
 	NotAfter        *string       `json:"notAfter,omitempty"`
 	FingerPrints    *FingerPrints `json:"fingerPrints,omitempty"`
