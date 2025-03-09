@@ -68,10 +68,10 @@ func (h *Health) AllGreen() bool {
 // 1. No Major alarms or alerts.
 // 2. At most 1 node is not connected.
 func (h *Health) Operative() bool {
-	// Check for no major alarms.
-	if h.Alarms != nil && !isZero(h.Alarms.Major) {
-		return false
-	}
+	// Nolonger checking for alarms, as it is being deprecated.
+	// if h.Alarms != nil && !isZero(h.Alarms.Major) {
+	// 	return false
+	// }
 
 	// Check for no major alerts.
 	if h.Alerts != nil && !isZero(h.Alerts.Major) {
