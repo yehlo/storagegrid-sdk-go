@@ -97,3 +97,13 @@ func (s *TenantUserService) Delete(ctx context.Context, id string) error {
 
 	return nil
 }
+
+func (s *TenantUserService) SetPassword(ctx context.Context, id string, password string) error {
+	data := map[string]string{"password": password}
+	err := s.client.DoParsed(ctx, "POST", tenantUserEndpoint+"/"+id+"/change-password", data, nil)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
