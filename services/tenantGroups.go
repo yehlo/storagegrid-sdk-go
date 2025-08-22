@@ -47,7 +47,7 @@ func (s *TenantGroupService) GetById(ctx context.Context, id string) (*models.Te
 
 func (s *TenantGroupService) GetByName(ctx context.Context, name string) (*models.TenantGroup, error) {
 	response := models.Response{}
-	response.Data = &models.User{}
+	response.Data = &models.TenantGroup{}
 	err := s.client.DoParsed(ctx, "GET", tenantGroupEndpoint+"/group/"+name, nil, &response)
 	if err != nil {
 		return nil, err
