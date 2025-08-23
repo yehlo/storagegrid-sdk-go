@@ -64,10 +64,10 @@ type S3Statement struct {
 	Action *[]string `json:"Action,omitempty"`
 	// Actions explicitly denied by this statement.
 	NotAction *[]string `json:"NotAction,omitempty"`
-	// Resource this statement applies to.
-	Resource string `json:"Resource,omitempty"`
-	// Resource explicitly excluded.
-	NotResource string `json:"NotResource,omitempty"`
+	// Resources this statement applies to.
+	Resource []string `json:"Resource,omitempty"`
+	// Resources explicitly excluded.
+	NotResource []string `json:"NotResource,omitempty"`
 	// Conditions under which the statement applies.
 	Condition *map[string]map[string]string `json:"Condition,omitempty"`
 }
