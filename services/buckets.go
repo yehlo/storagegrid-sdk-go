@@ -110,7 +110,7 @@ func (s *BucketService) DrainStatus(ctx context.Context, name string) (*models.B
 	response := models.Response{}
 	response.Data = &models.BucketDeleteObjectStatus{}
 
-	err := s.client.DoParsed(ctx, "GET", bucketEndpoint+"/"+name+"/delete-objects", body, &response)
+	err := s.client.DoParsed(ctx, "GET", bucketEndpoint+"/"+name+"/delete-objects", nil, &response)
 	if err != nil {
 		return nil, err
 	}
