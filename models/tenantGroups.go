@@ -18,7 +18,6 @@ type TenantGroup struct {
 	GroupURN *string `json:"groupURN,omitempty"`
 }
 
-// GroupPolicies contains the specific policy configurations for the group.
 type TenantGroupPolicies struct {
 	// Management-level permissions for the group.
 	Management *TenantGroupManagementPolicy `json:"management,omitempty"`
@@ -28,7 +27,6 @@ type TenantGroupPolicies struct {
 	Swift *SwiftPolicy `json:"swift,omitempty"`
 }
 
-// ManagementPolicy defines management-level permissions.
 type TenantGroupManagementPolicy struct {
 	// Permission to manage all containers.
 	ManageAllContainers *bool `json:"manageAllContainers,omitempty"`

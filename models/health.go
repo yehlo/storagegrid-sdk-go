@@ -1,6 +1,5 @@
 package models
 
-// Data represents the detailed data within the response.
 type Health struct {
 	Alarms *Alarms `json:"alarms,omitempty"` // Details about alarms.
 	Alerts *Alerts `json:"alerts,omitempty"` // Details about alerts.

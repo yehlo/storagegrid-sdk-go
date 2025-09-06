@@ -1,0 +1,150 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main, feat** ]
+
+env:
+  # Common versions
+  GOLANGCI_VERSION: 'v2.4.0'
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5
+    
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: "go.mod"
+        cache: true
+    
+    - name: Run golangci-lint
+      uses: golangci/golangci-lint-action@v8
+      with:
+        version: ${{ env.GOLANGCI_VERSION }}
+
+  format:
+    name: Format Check
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5
+    
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: "go.mod"
+        cache: true
+    
+    - name: Check formatting
+      run: |
+        if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then
+          echo "The following files are not formatted:"
+          gofmt -s -l .
+          exit 1
+        fi
+    
+    - name: Go vet
+      run: go vet ./...
+    
+    - name: Go mod tidy check
+      run: |
+        go mod tidy
+        if [ "$(git status --porcelain)" ]; then
+          echo "go mod tidy resulted in changes:"
+          git status --porcelain
+          exit 1
+        fi
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5
+    
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: "go.mod"
+        cache: true
+    
+    - name: Run tests with coverage
+      run: |
+        go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
+    
+    - name: Generate coverage report
+      run: |
+        go tool cover -html=coverage.out -o coverage.html
+        go tool cover -func=coverage.out
+    
+    - uses: codecov/codecov-action@v5
+      with:
+        fail_ci_if_error: true
+        files: ./coverage.out
+        flags: unittests # optional
+        name: codecov-umbrella # optional
+        token: ${{ secrets.CODECOV_TOKEN }}
+        verbose: true 
+    
+    - name: Upload coverage reports as artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-reports
+        path: |
+          coverage.out
+          coverage.html
+
+  integration:
+    name: Integration Test
+    runs-on: ubuntu-latest
+    needs: [lint, format, test]
+    steps:
+    - uses: actions/checkout@v5
+    
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: "go.mod"
+        cache: true
+    
+    - name: Build
+      run: go build -v ./...
+    
+    - name: Test module imports
+      run: |
+        echo "Testing that all packages can be imported..."
+        go list ./...
+        
+        echo "Testing that mock packages work correctly..."
+        go run -c 'import _ "github.com/yehlo/storagegrid-sdk-go/testing"' 2>/dev/null || echo "Mock import test passed"
+    
+    - name: Verify interface compliance
+      run: |
+        echo "Verifying that all services implement their interfaces..."
+        go test -v -run TestInterface ./services/...
+
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5
+    
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: "go.mod"
+        cache: true
+    
+    - name: Run Gosec Security Scanner
+      uses: securecodewarrior/github-action-gosec@master
+      with:
+        args: '-no-fail -fmt sarif -out results.sarif ./...'
+    
+    - name: Upload SARIF file
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: results.sarif

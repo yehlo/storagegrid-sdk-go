@@ -14,7 +14,7 @@ import (
 	"sync"
 	"time"
 
-	models "github.com/yehlo/storagegrid-sdk-go/models"
+	"github.com/yehlo/storagegrid-sdk-go/models"
 )
 
 var (
@@ -77,7 +77,7 @@ func newClient(options ...ClientOption) (*Client, error) {
 
 	var transCfg = &http.Transport{
 		Proxy:           http.ProxyFromEnvironment,
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: c.skipSSL},
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: c.skipSSL}, // #nosec G402
 	}
 
 	c.httpClient.Transport = transCfg
