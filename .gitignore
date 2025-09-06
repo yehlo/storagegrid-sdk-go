@@ -33,6 +33,3 @@ tmp/
 
 # vscode debug files
 __debug*
-
-# local main.go to test sdk
-main.go
