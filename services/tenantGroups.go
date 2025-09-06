@@ -11,6 +11,16 @@ const (
 	tenantGroupEndpoint string = "/org/groups"
 )
 
+// TenantGroupServiceInterface defines the contract for tenant group service operations
+type TenantGroupServiceInterface interface {
+	List(ctx context.Context) (*[]models.TenantGroup, error)
+	GetById(ctx context.Context, id string) (*models.TenantGroup, error)
+	GetByName(ctx context.Context, name string) (*models.TenantGroup, error)
+	Create(ctx context.Context, group *models.TenantGroup) (*models.TenantGroup, error)
+	Update(ctx context.Context, group *models.TenantGroup) (*models.TenantGroup, error)
+	Delete(ctx context.Context, id string) error
+}
+
 type TenantGroupService struct {
 	client HTTPClient
 }

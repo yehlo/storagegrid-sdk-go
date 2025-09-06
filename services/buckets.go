@@ -12,6 +12,17 @@ const (
 	tenantUsageEndpoint string = "/org/usage"
 )
 
+// BucketServiceInterface defines the contract for bucket service operations
+type BucketServiceInterface interface {
+	List(ctx context.Context) (*[]models.Bucket, error)
+	GetByName(ctx context.Context, name string) (*models.Bucket, error)
+	Create(ctx context.Context, bucket *models.Bucket) (*models.Bucket, error)
+	GetUsage(ctx context.Context, name string) (*models.BucketStats, error)
+	Delete(ctx context.Context, name string) error
+	Drain(ctx context.Context, name string) (*models.BucketDeleteObjectStatus, error)
+	DrainStatus(ctx context.Context, name string) (*models.BucketDeleteObjectStatus, error)
+}
+
 type BucketService struct {
 	client HTTPClient
 }

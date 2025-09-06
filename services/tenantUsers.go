@@ -11,6 +11,17 @@ const (
 	tenantUserEndpoint string = "/org/users"
 )
 
+// TenantUserServiceInterface defines the contract for tenant user service operations
+type TenantUserServiceInterface interface {
+	List(ctx context.Context) (*[]models.User, error)
+	GetById(ctx context.Context, id string) (*models.User, error)
+	GetByName(ctx context.Context, name string) (*models.User, error)
+	Create(ctx context.Context, user *models.User) (*models.User, error)
+	Update(ctx context.Context, user *models.User) (*models.User, error)
+	Delete(ctx context.Context, id string) error
+	SetPassword(ctx context.Context, id string, password string) error
+}
+
 type TenantUserService struct {
 	client HTTPClient
 }

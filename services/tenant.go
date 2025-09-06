@@ -10,6 +10,16 @@ const (
 	tenantEndpoint string = "/grid/accounts"
 )
 
+// TenantServiceInterface defines the contract for tenant service operations
+type TenantServiceInterface interface {
+	List(ctx context.Context) (*[]models.Tenant, error)
+	GetById(ctx context.Context, id string) (*models.Tenant, error)
+	Create(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error)
+	Update(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error)
+	Delete(ctx context.Context, id string) error
+	GetUsage(ctx context.Context, id string) (*models.TenantUsage, error)
+}
+
 type TenantService struct {
 	client HTTPClient
 }

@@ -12,6 +12,17 @@ const (
 	serverConfigEndpoint  string = gatewayConfigEndpoint + "/%s/server-config"
 )
 
+// GatewayConfigServiceInterface defines the contract for gateway config service operations
+type GatewayConfigServiceInterface interface {
+	ListGatewayConfigs(ctx context.Context) (*[]models.GatewayConfig, error)
+	GetGatewayConfigById(ctx context.Context, id string) (*models.GatewayConfig, error)
+	CreateGatewayConfig(ctx context.Context, gatewayConfig *models.GatewayConfig) (*models.GatewayConfig, error)
+	UpdateGatewayConfig(ctx context.Context, gatewayConfig *models.GatewayConfig) (*models.GatewayConfig, error)
+	DeleteGatewayConfig(ctx context.Context, id string) error
+	GetGatewayServerConfig(ctx context.Context, gatewayID string) (*models.GWServerConfig, error)
+	UpdateGatewayServerConfig(ctx context.Context, gatewayID string, gatewayServerConfig *models.GWServerConfig) (*models.GWServerConfig, error)
+}
+
 func getServerConfigEndpoint(id string) string {
 	return fmt.Sprintf(serverConfigEndpoint, id)
 }
