@@ -64,7 +64,7 @@ func setupGridClient(t *testing.T) *client.GridClient {
 	return gridClient
 }
 
-func setupTenantClient(t *testing.T, tenantName string) *client.TenantClient {
+func setupTenantClient(t *testing.T, tenantID string) *client.TenantClient {
 	t.Helper()
 
 	host := os.Getenv("STORAGEGRID_HOST")
@@ -76,8 +76,9 @@ func setupTenantClient(t *testing.T, tenantName string) *client.TenantClient {
 	}
 
 	credentials := &models.Credentials{
-		Username: username,
-		Password: password,
+		Username:  username,
+		Password:  password,
+		AccountId: &tenantID,
 	}
 
 	tenantClient, err := client.NewTenantClient(
@@ -198,12 +199,12 @@ func TestTenantClient_BucketOperations(t *testing.T) {
 	}
 
 	// This test requires a pre-existing tenant and credentials
-	tenantName := os.Getenv("STORAGEGRID_TEST_TENANT")
-	if tenantName == "" {
-		t.Skip("STORAGEGRID_TEST_TENANT not set, skipping tenant client tests")
+	tenantID := os.Getenv("STORAGEGRID_TEST_TENANT_ID")
+	if tenantID == "" {
+		t.Skip("STORAGEGRID_TEST_TENANT_ID not set, skipping tenant client tests")
 	}
 
-	tenantClient := setupTenantClient(t, tenantName)
+	tenantClient := setupTenantClient(t, tenantID)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
