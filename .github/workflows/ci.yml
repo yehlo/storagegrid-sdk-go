@@ -81,15 +81,6 @@ jobs:
         go tool cover -html=coverage.out -o coverage.html
         go tool cover -func=coverage.out
     
-    - uses: codecov/codecov-action@v5
-      with:
-        fail_ci_if_error: true
-        files: ./coverage.out
-        flags: unittests # optional
-        name: codecov-umbrella # optional
-        token: ${{ secrets.CODECOV_TOKEN }}
-        verbose: true 
-    
     - name: Upload coverage reports as artifacts
       uses: actions/upload-artifact@v4
       with:
