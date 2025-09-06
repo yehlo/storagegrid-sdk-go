@@ -10,6 +10,11 @@ const (
 	healthEndpoint string = "/grid/health"
 )
 
+// HealthServiceInterface defines the contract for health service operations
+type HealthServiceInterface interface {
+	Get(ctx context.Context) (*models.Health, error)
+}
+
 type HealthService struct {
 	client HTTPClient
 }

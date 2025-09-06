@@ -11,6 +11,11 @@ const (
 	tenantRegionEndpoint string = "/org/regions"
 )
 
+// RegionServiceInterface defines the contract for region service operations
+type RegionServiceInterface interface {
+	List(ctx context.Context) (*[]string, error)
+}
+
 type RegionService struct {
 	client   HTTPClient
 	endpoint string

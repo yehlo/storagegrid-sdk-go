@@ -12,6 +12,18 @@ const (
 	users3AccessKeyEndpoint        string = "/org/users/%s/s3-access-keys"
 )
 
+// S3AccessKeyServiceInterface defines the contract for S3 access key service operations
+type S3AccessKeyServiceInterface interface {
+	ListForCurrentUser(ctx context.Context) (*[]models.S3AccessKey, error)
+	ListForUser(ctx context.Context, userId string) (*[]models.S3AccessKey, error)
+	GetByIdForCurrentUser(ctx context.Context, id string) (*models.S3AccessKey, error)
+	GetByIdForUser(ctx context.Context, userId string, id string) (*models.S3AccessKey, error)
+	CreateForCurrentUser(ctx context.Context, s3AccessKey *models.S3AccessKey) (*models.S3AccessKey, error)
+	CreateForUser(ctx context.Context, userId string, s3AccessKey *models.S3AccessKey) (*models.S3AccessKey, error)
+	DeleteForCurrentUser(ctx context.Context, id string) error
+	DeleteForUser(ctx context.Context, userId string, id string) error
+}
+
 func getUsers3AccessKeyEndpoint(userId string) string {
 	return fmt.Sprintf(users3AccessKeyEndpoint, userId)
 }

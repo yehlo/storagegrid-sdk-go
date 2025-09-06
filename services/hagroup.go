@@ -10,6 +10,15 @@ const (
 	hagroupEndpoint string = "/private/ha-groups"
 )
 
+// HAGroupServiceInterface defines the contract for HA group service operations
+type HAGroupServiceInterface interface {
+	List(ctx context.Context) (*[]models.HAGroup, error)
+	GetById(ctx context.Context, id string) (*models.HAGroup, error)
+	Create(ctx context.Context, hagroup *models.HAGroup) (*models.HAGroup, error)
+	Update(ctx context.Context, hagroup *models.HAGroup) (*models.HAGroup, error)
+	Delete(ctx context.Context, id string) error
+}
+
 type HAGroupService struct {
 	client HTTPClient
 }
