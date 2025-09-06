@@ -2,7 +2,7 @@ package models
 
 import "time"
 
-// TenantUsagerepresents the overall usage of any tenant
+// TenantUsage represents the usage statistics of a tenant.
 type TenantUsage struct {
 	CalculationTime *time.Time     `json:"calculationTime,omitempty"` // The time the calculation was performed.
 	ObjectCount     *int64         `json:"objectCount,omitempty"`     // Total number of objects.

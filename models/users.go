@@ -21,7 +21,6 @@ type User struct {
 	UserURN *string `json:"userURN,omitempty"`
 }
 
-// The shortname is the portion of the unique name after the slash
 func (u *User) GetShortname() string {
 	if u == nil {
 		return ""

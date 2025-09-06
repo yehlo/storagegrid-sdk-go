@@ -27,7 +27,6 @@ type AccountNoIdSynchronizeRules struct {
 	CreateKey *bool `json:"createKey,omitempty"`
 }
 
-// PolicyAccount settings for the tenant account
 type TenantPolicy struct {
 	// whether the tenant account should configure its own identity source. If false, the tenant uses the grid-wide identity source.
 	UseAccountIdentitySource bool `json:"useAccountIdentitySource"`

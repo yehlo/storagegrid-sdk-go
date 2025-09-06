@@ -4,7 +4,7 @@ import (
 	"context"
 	"strings"
 
-	models "github.com/yehlo/storagegrid-sdk-go/models"
+	"github.com/yehlo/storagegrid-sdk-go/models"
 )
 
 const (
