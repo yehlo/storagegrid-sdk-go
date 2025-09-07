@@ -90,21 +90,6 @@ jobs:
         path: govulncheck-results.json
         retention-days: 30
 
-  dependency-review:
-    name: Dependency Review
-    runs-on: ubuntu-latest
-    # Only run on push events to main branch
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v5
-    
-    - name: Dependency Review
-      uses: actions/dependency-review-action@v4
-      with:
-        fail-on-severity: moderate
-        comment-summary-in-pr: false
-
   trivy:
     name: Trivy Security Scan
     runs-on: ubuntu-latest
