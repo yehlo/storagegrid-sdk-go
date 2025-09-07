@@ -10,6 +10,9 @@ env:
   # Common versions
   GOLANGCI_VERSION: 'v2.4.0'
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     name: Lint
