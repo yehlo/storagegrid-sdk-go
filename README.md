@@ -165,13 +165,13 @@ if err != nil {
 
 // Create a new tenant
 tenant := &models.Tenant{
-	Name:         aws.String("acme-corp"),
-	Description:  aws.String("ACME Corporation tenant"),
+	Name:         "my-tenant",
+	Description:  "Some description",
 	Capabilities: []string{"management", "s3"},
 	Policy: &models.TenantPolicy{
 		UseAccountIdentitySource: false,
 		AllowPlatformServices:    true,
-		QuotaObjectBytes:         aws.Int64(100 * 1024 * 1024 * 1024), // 100GB
+		QuotaObjectBytes:         100 * 1024 * 1024 * 1024, // 100GB
 	},
 }
 
@@ -231,9 +231,9 @@ if err != nil {
 bucket := &models.Bucket{
 	Name:             "my-application-data",
 	Region:           "us-east-1",
-	EnableVersioning: aws.Bool(true),
+	EnableVersioning: true,
 	S3ObjectLock: &models.BucketS3ObjectLockSettings{
-		Enabled: aws.Bool(false),
+		Enabled: false,
 	},
 }
 
@@ -260,7 +260,7 @@ for _, bucket := range *buckets {
 user := &models.User{
 	UniqueName:  "application-user", // Will be prefixed with "user/"
 	DisplayName: "Application Service User",
-	Disable:     aws.Bool(false),
+	Disable:     false,
 }
 
 createdUser, err := tenantClient.Users().Create(ctx, user)
@@ -306,7 +306,7 @@ fmt.Printf("Grid Status: All Green = %v\n", health.AllGreen())
 #### Create Tenant
 ```go
 tenant := &models.Tenant{
-    Name:         aws.String("my-tenant"),
+    Name:         "my-tenant",
     Capabilities: []string{"s3", "management"},
 }
 createdTenant, err := gridClient.Tenant().Create(ctx, tenant)
@@ -351,7 +351,7 @@ func TestTenantOperations(t *testing.T) {
 			return &[]models.Tenant{
 				{
 					Id:   "tenant-123",
-					Name: aws.String("Test Tenant"),
+					Name: "Test Tenant",
 				},
 			}, nil
 		},
