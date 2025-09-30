@@ -24,14 +24,10 @@ func NewHealthService(client HTTPClient) *HealthService {
 }
 
 func (s *HealthService) Get(ctx context.Context) (*models.Health, error) {
-	response := models.Response{}
-	response.Data = &models.Health{}
-	err := s.client.DoParsed(ctx, "GET", healthEndpoint, nil, &response)
-	if err != nil {
+	var response models.Response[*models.Health]
+	if err := s.client.DoParsed(ctx, "GET", healthEndpoint, nil, &response); err != nil {
 		return nil, err
 	}
 
-	health := response.Data.(*models.Health)
-
-	return health, nil
+	return response.Data, nil
 }

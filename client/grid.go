@@ -10,6 +10,7 @@ const (
 	gridAPI = "api/v4"
 )
 
+// GridClient is the base struct used to interface with the storagegrid API
 type GridClient struct {
 	client *Client
 
@@ -21,7 +22,7 @@ type GridClient struct {
 	gateway services.GatewayConfigServiceInterface
 }
 
-func NewGridClient(options ...ClientOption) (*GridClient, error) {
+func NewGridClient(options ...Option) (*GridClient, error) {
 	c, err := newClient(options...)
 	if err != nil {
 		return nil, err

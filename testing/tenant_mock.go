@@ -9,7 +9,7 @@ import (
 
 // MockTenantService implements services.TenantServiceInterface for testing
 type MockTenantService struct {
-	ListFunc     func(ctx context.Context) (*[]models.Tenant, error)
+	ListFunc     func(ctx context.Context) ([]models.Tenant, error)
 	GetByIdFunc  func(ctx context.Context, id string) (*models.Tenant, error)
 	CreateFunc   func(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error)
 	UpdateFunc   func(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error)
@@ -17,25 +17,25 @@ type MockTenantService struct {
 	GetUsageFunc func(ctx context.Context, id string) (*models.TenantUsage, error)
 }
 
-func (m *MockTenantService) List(ctx context.Context) (*[]models.Tenant, error) {
+func (m *MockTenantService) List(ctx context.Context) ([]models.Tenant, error) {
 	if m.ListFunc != nil {
 		return m.ListFunc(ctx)
 	}
-	return &[]models.Tenant{}, nil
+	return []models.Tenant{}, nil
 }
 
 func (m *MockTenantService) GetById(ctx context.Context, id string) (*models.Tenant, error) {
 	if m.GetByIdFunc != nil {
 		return m.GetByIdFunc(ctx, id)
 	}
-	return &models.Tenant{Id: id}, nil
+	return &models.Tenant{ID: id}, nil
 }
 
 func (m *MockTenantService) Create(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error) {
 	if m.CreateFunc != nil {
 		return m.CreateFunc(ctx, tenant)
 	}
-	tenant.Id = "mock-tenant-id"
+	tenant.ID = "mock-tenant-id"
 	return tenant, nil
 }
 

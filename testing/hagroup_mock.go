@@ -9,18 +9,18 @@ import (
 
 // MockHAGroupService implements services.HAGroupServiceInterface for testing
 type MockHAGroupService struct {
-	ListFunc    func(ctx context.Context) (*[]models.HAGroup, error)
+	ListFunc    func(ctx context.Context) ([]models.HAGroup, error)
 	GetByIdFunc func(ctx context.Context, id string) (*models.HAGroup, error)
 	CreateFunc  func(ctx context.Context, hagroup *models.HAGroup) (*models.HAGroup, error)
 	UpdateFunc  func(ctx context.Context, hagroup *models.HAGroup) (*models.HAGroup, error)
 	DeleteFunc  func(ctx context.Context, id string) error
 }
 
-func (m *MockHAGroupService) List(ctx context.Context) (*[]models.HAGroup, error) {
+func (m *MockHAGroupService) List(ctx context.Context) ([]models.HAGroup, error) {
 	if m.ListFunc != nil {
 		return m.ListFunc(ctx)
 	}
-	return &[]models.HAGroup{}, nil
+	return []models.HAGroup{}, nil
 }
 
 func (m *MockHAGroupService) GetById(ctx context.Context, id string) (*models.HAGroup, error) {

@@ -9,7 +9,7 @@ import (
 
 // MockBucketService implements services.BucketServiceInterface for testing
 type MockBucketService struct {
-	ListFunc        func(ctx context.Context) (*[]models.Bucket, error)
+	ListFunc        func(ctx context.Context) ([]models.Bucket, error)
 	GetByNameFunc   func(ctx context.Context, name string) (*models.Bucket, error)
 	CreateFunc      func(ctx context.Context, bucket *models.Bucket) (*models.Bucket, error)
 	GetUsageFunc    func(ctx context.Context, name string) (*models.BucketStats, error)
@@ -18,11 +18,11 @@ type MockBucketService struct {
 	DrainStatusFunc func(ctx context.Context, name string) (*models.BucketDeleteObjectStatus, error)
 }
 
-func (m *MockBucketService) List(ctx context.Context) (*[]models.Bucket, error) {
+func (m *MockBucketService) List(ctx context.Context) ([]models.Bucket, error) {
 	if m.ListFunc != nil {
 		return m.ListFunc(ctx)
 	}
-	return &[]models.Bucket{}, nil
+	return []models.Bucket{}, nil
 }
 
 func (m *MockBucketService) GetByName(ctx context.Context, name string) (*models.Bucket, error) {

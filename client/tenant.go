@@ -10,10 +10,12 @@ const (
 	tenantAPI = "api/v4"
 )
 
+// TenantClient is the base struct used to interface with the storagegrid tenant API
 type TenantClient struct {
 	client *Client
 
 	// Services
+
 	bucket       services.BucketServiceInterface
 	s3AccessKeys services.S3AccessKeyServiceInterface
 	users        services.TenantUserServiceInterface
@@ -21,7 +23,8 @@ type TenantClient struct {
 	region       services.RegionServiceInterface
 }
 
-func NewTenantClient(options ...ClientOption) (*TenantClient, error) {
+// NewTenantClient returns a new tenant client according to the options provided
+func NewTenantClient(options ...Option) (*TenantClient, error) {
 	c, err := newClient(options...)
 	if err != nil {
 		return nil, err
@@ -41,22 +44,27 @@ func NewTenantClient(options ...ClientOption) (*TenantClient, error) {
 
 // Service getters return interfaces to enable testing with mocks
 
+// Bucket returns the bucket service interface
 func (tc *TenantClient) Bucket() services.BucketServiceInterface {
 	return tc.bucket
 }
 
+// S3AccessKeys returns the S3 access key service interface
 func (tc *TenantClient) S3AccessKeys() services.S3AccessKeyServiceInterface {
 	return tc.s3AccessKeys
 }
 
+// Users returns the tenant user service interface
 func (tc *TenantClient) Users() services.TenantUserServiceInterface {
 	return tc.users
 }
 
+// Groups returns the tenant group service interface
 func (tc *TenantClient) Groups() services.TenantGroupServiceInterface {
 	return tc.groups
 }
 
+// Region returns the region service interface
 func (tc *TenantClient) Region() services.RegionServiceInterface {
 	return tc.region
 }

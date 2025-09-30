@@ -9,7 +9,7 @@ import (
 
 // MockTenantGroupService implements services.TenantGroupServiceInterface for testing
 type MockTenantGroupService struct {
-	ListFunc      func(ctx context.Context) (*[]models.TenantGroup, error)
+	ListFunc      func(ctx context.Context) ([]models.TenantGroup, error)
 	GetByIdFunc   func(ctx context.Context, id string) (*models.TenantGroup, error)
 	GetByNameFunc func(ctx context.Context, name string) (*models.TenantGroup, error)
 	CreateFunc    func(ctx context.Context, group *models.TenantGroup) (*models.TenantGroup, error)
@@ -17,11 +17,11 @@ type MockTenantGroupService struct {
 	DeleteFunc    func(ctx context.Context, id string) error
 }
 
-func (m *MockTenantGroupService) List(ctx context.Context) (*[]models.TenantGroup, error) {
+func (m *MockTenantGroupService) List(ctx context.Context) ([]models.TenantGroup, error) {
 	if m.ListFunc != nil {
 		return m.ListFunc(ctx)
 	}
-	return &[]models.TenantGroup{}, nil
+	return []models.TenantGroup{}, nil
 }
 
 func (m *MockTenantGroupService) GetById(ctx context.Context, id string) (*models.TenantGroup, error) {

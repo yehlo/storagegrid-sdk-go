@@ -9,7 +9,7 @@ import (
 
 // MockTenantUserService implements services.TenantUserServiceInterface for testing
 type MockTenantUserService struct {
-	ListFunc        func(ctx context.Context) (*[]models.User, error)
+	ListFunc        func(ctx context.Context) ([]models.User, error)
 	GetByIdFunc     func(ctx context.Context, id string) (*models.User, error)
 	GetByNameFunc   func(ctx context.Context, name string) (*models.User, error)
 	CreateFunc      func(ctx context.Context, user *models.User) (*models.User, error)
@@ -18,11 +18,11 @@ type MockTenantUserService struct {
 	SetPasswordFunc func(ctx context.Context, id string, password string) error
 }
 
-func (m *MockTenantUserService) List(ctx context.Context) (*[]models.User, error) {
+func (m *MockTenantUserService) List(ctx context.Context) ([]models.User, error) {
 	if m.ListFunc != nil {
 		return m.ListFunc(ctx)
 	}
-	return &[]models.User{}, nil
+	return []models.User{}, nil
 }
 
 func (m *MockTenantUserService) GetById(ctx context.Context, id string) (*models.User, error) {

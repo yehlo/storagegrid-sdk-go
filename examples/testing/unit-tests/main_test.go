@@ -36,7 +36,7 @@ func (tm *TenantManager) CreateTenantWithBucket(ctx context.Context, tenantName,
 	}
 
 	// Validate tenant was created
-	if createdTenant.Id == "" {
+	if createdTenant.ID == "" {
 		return errors.New("tenant creation failed: no ID returned")
 	}
 
@@ -100,7 +100,7 @@ func TestTenantManager_CreateTenantWithBucket(t *testing.T) {
 			setupMocks: func(mockTenant *sgTesting.MockTenantService, mockBucket *sgTesting.MockBucketService) {
 				// Mock successful tenant creation
 				mockTenant.CreateFunc = func(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error) {
-					tenant.Id = "tenant-123"
+					tenant.ID = "tenant-123"
 					return tenant, nil
 				}
 
@@ -131,7 +131,7 @@ func TestTenantManager_CreateTenantWithBucket(t *testing.T) {
 			setupMocks: func(mockTenant *sgTesting.MockTenantService, mockBucket *sgTesting.MockBucketService) {
 				// Mock successful tenant creation
 				mockTenant.CreateFunc = func(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error) {
-					tenant.Id = "tenant-123"
+					tenant.ID = "tenant-123"
 					return tenant, nil
 				}
 
@@ -211,7 +211,7 @@ func TestTenantManager_GetTenantUsageSummary(t *testing.T) {
 					return &models.TenantUsage{
 						DataBytes:   &dataBytes,
 						ObjectCount: &objectCount,
-						Buckets: []*models.BucketStats{
+						Buckets: []models.BucketStats{
 							{Name: stringPtr("bucket1")},
 							{Name: stringPtr("bucket2")},
 						},
@@ -242,7 +242,7 @@ func TestTenantManager_GetTenantUsageSummary(t *testing.T) {
 			setupMock: func(mockTenant *sgTesting.MockTenantService) {
 				mockTenant.GetUsageFunc = func(ctx context.Context, id string) (*models.TenantUsage, error) {
 					return &models.TenantUsage{
-						Buckets: []*models.BucketStats{},
+						Buckets: []models.BucketStats{},
 					}, nil
 				}
 			},
@@ -317,7 +317,7 @@ func BenchmarkTenantManager_GetTenantUsageSummary(b *testing.B) {
 		return &models.TenantUsage{
 			DataBytes:   &dataBytes,
 			ObjectCount: &objectCount,
-			Buckets:     []*models.BucketStats{},
+			Buckets:     []models.BucketStats{},
 		}, nil
 	}
 

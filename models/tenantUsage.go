@@ -4,10 +4,10 @@ import "time"
 
 // TenantUsage represents the usage statistics of a tenant.
 type TenantUsage struct {
-	CalculationTime *time.Time     `json:"calculationTime,omitempty"` // The time the calculation was performed.
-	ObjectCount     *int64         `json:"objectCount,omitempty"`     // Total number of objects.
-	DataBytes       *int64         `json:"dataBytes,omitempty"`       // Total size of data in bytes.
-	Buckets         []*BucketStats `json:"buckets,omitempty"`         // List of bucket-specific statistics.
+	CalculationTime *time.Time    `json:"calculationTime,omitempty"` // The time the calculation was performed.
+	ObjectCount     *int64        `json:"objectCount,omitempty"`     // Total number of objects.
+	DataBytes       *int64        `json:"dataBytes,omitempty"`       // Total size of data in bytes.
+	Buckets         []BucketStats `json:"buckets,omitempty"`         // List of bucket-specific statistics.
 }
 
 // BucketStats represents the statistics of a specific bucket.

@@ -13,7 +13,7 @@ const (
 
 // RegionServiceInterface defines the contract for region service operations
 type RegionServiceInterface interface {
-	List(ctx context.Context) (*[]string, error)
+	List(ctx context.Context) ([]string, error)
 }
 
 type RegionService struct {
@@ -29,15 +29,11 @@ func NewRegionTenantService(client HTTPClient) *RegionService {
 	return &RegionService{client: client, endpoint: tenantRegionEndpoint}
 }
 
-func (s *RegionService) List(ctx context.Context) (*[]string, error) {
-	response := models.Response{}
-	response.Data = &[]string{}
-	err := s.client.DoParsed(ctx, "GET", s.endpoint, nil, &response)
-	if err != nil {
+func (s *RegionService) List(ctx context.Context) ([]string, error) {
+	var response models.Response[[]string]
+	if err := s.client.DoParsed(ctx, "GET", s.endpoint, nil, &response); err != nil {
 		return nil, err
 	}
 
-	regions := response.Data.(*[]string)
-
-	return regions, nil
+	return response.Data, nil
 }

@@ -26,7 +26,7 @@ func main() {
 	ctx := context.Background()
 
 	// Configure client options
-	opts := []client.ClientOption{
+	opts := []client.Option{
 		client.WithEndpoint(endpoint),
 		client.WithCredentials(&models.Credentials{
 			Username:  username,
@@ -77,13 +77,13 @@ func listBuckets(ctx context.Context, client *client.TenantClient) error {
 		return fmt.Errorf("failed to list buckets: %w", err)
 	}
 
-	if len(*buckets) == 0 {
+	if len(buckets) == 0 {
 		fmt.Println("  No buckets found")
 		return nil
 	}
 
-	fmt.Printf("  Found %d bucket(s):\n", len(*buckets))
-	for _, bucket := range *buckets {
+	fmt.Printf("  Found %d bucket(s):\n", len(buckets))
+	for _, bucket := range buckets {
 		fmt.Printf("    • %s\n", bucket.Name)
 		fmt.Printf("      Region: %s\n", bucket.Region)
 		fmt.Printf("      Created: %s\n", bucket.CreationTime.Format("2006-01-02 15:04:05"))
@@ -180,12 +180,12 @@ func monitorBucketUsage(ctx context.Context, client *client.TenantClient) error 
 		return fmt.Errorf("failed to list buckets: %w", err)
 	}
 
-	if len(*buckets) == 0 {
+	if len(buckets) == 0 {
 		fmt.Println("  No buckets to monitor")
 		return nil
 	}
 
-	for _, bucket := range *buckets {
+	for _, bucket := range buckets {
 		fmt.Printf("\n  📈 Usage for %s:\n", bucket.Name)
 
 		usage, err := client.Bucket().GetUsage(ctx, bucket.Name)

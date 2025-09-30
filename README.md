@@ -4,7 +4,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/yehlo/storagegrid-sdk-go)](https://goreportcard.com/report/github.com/yehlo/storagegrid-sdk-go)
 
 > **⚠️ Community-Maintained SDK**
-> 
+>
 > This SDK was created by the community due to the lack of an official NetApp StorageGRID SDK for Go. It is designed to fulfill the needs of its maintainers and contributors. If you find something missing or spot a bug, please open an [issue](https://github.com/yehlo/storagegrid-sdk-go/issues) or submit a [pull request](https://github.com/yehlo/storagegrid-sdk-go/pulls)! Contributions are highly encouraged.
 
 ## Table of Contents
@@ -195,8 +195,8 @@ if err != nil {
 if health.AllGreen() {
 	log.Println("✅ Grid is healthy")
 } else {
-	log.Printf("⚠️  Grid has issues - Connected nodes: %d, Alerts: %d", 
-		*health.Nodes.Connected, 
+	log.Printf("⚠️  Grid has issues - Connected nodes: %d, Alerts: %d",
+		*health.Nodes.Connected,
 		*health.Alerts.Critical + *health.Alerts.Major)
 }
 ```
@@ -396,7 +396,7 @@ func TestIntegration(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	
+
 	client, err := client.NewGridClient(
 		client.WithEndpoint(endpoint),
 		client.WithCredentials(&models.Credentials{
@@ -423,7 +423,7 @@ func TestIntegration(t *testing.T) {
 The `testing` package provides mocks for all service interfaces:
 
 - `MockTenantService` - Grid tenant management
-- `MockBucketService` - Bucket operations  
+- `MockBucketService` - Bucket operations
 - `MockTenantUserService` - Tenant user management
 - `MockTenantGroupService` - Tenant group management
 - `MockS3AccessKeyService` - S3 access key management
