@@ -15,11 +15,12 @@ type GridClient struct {
 	client *Client
 
 	// Services
-	tenant  services.TenantServiceInterface
-	health  services.HealthServiceInterface
-	region  services.RegionServiceInterface
-	haGroup services.HAGroupServiceInterface
-	gateway services.GatewayConfigServiceInterface
+	tenant       services.TenantServiceInterface
+	health       services.HealthServiceInterface
+	region       services.RegionServiceInterface
+	haGroup      services.HAGroupServiceInterface
+	gateway      services.GatewayConfigServiceInterface
+	trafficClass services.TrafficClassServiceInterface
 }
 
 func NewGridClient(options ...Option) (*GridClient, error) {
@@ -31,16 +32,20 @@ func NewGridClient(options ...Option) (*GridClient, error) {
 	c.baseURL = c.baseURL.ResolveReference(&url.URL{Path: gridAPI})
 
 	return &GridClient{
-		client:  c,
-		tenant:  services.NewTenantService(c),
-		health:  services.NewHealthService(c),
-		region:  services.NewRegionGridService(c),
-		haGroup: services.NewHAGroupService(c),
-		gateway: services.NewGatewayConfigService(c),
+		client:       c,
+		tenant:       services.NewTenantService(c),
+		health:       services.NewHealthService(c),
+		region:       services.NewRegionGridService(c),
+		haGroup:      services.NewHAGroupService(c),
+		gateway:      services.NewGatewayConfigService(c),
+		trafficClass: services.NewTrafficClassService(c),
 	}, nil
 }
 
 // Service getters return interfaces to enable testing with mocks
+func (gc *GridClient) TrafficClass() services.TrafficClassServiceInterface {
+	return gc.trafficClass
+}
 
 func (gc *GridClient) Tenant() services.TenantServiceInterface {
 	return gc.tenant

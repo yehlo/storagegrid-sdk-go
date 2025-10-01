@@ -13,7 +13,7 @@ const (
 
 // TrafficClassServiceInterface defines the contract for tenant service operations
 type TrafficClassServiceInterface interface {
-	// Create(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error)
+	CreatePolicy(ctx context.Context, tenant *models.TrafficClassPolicy) (*models.TrafficClassPolicy, error)
 	// Delete(ctx context.Context, id string) error
 	// GetByID(ctx context.Context, id string) (*models.Tenant, error)
 	List(context.Context) ([]models.TrafficClass, error)
@@ -36,3 +36,15 @@ func (s *TrafficClassService) List(ctx context.Context) ([]models.TrafficClass, 
 
 	return response.Data, nil
 }
+
+func (s *TrafficClassService) CreatePolicy(ctx context.Context, tenant *models.TrafficClassPolicy) (*models.TrafficClassPolicy, error) {
+	var response models.Response[*models.TrafficClassPolicy]
+	if err := s.client.DoParsed(ctx, http.MethodPost, trafficClassEndpoint, tenant, &response); err != nil {
+		return nil, err
+	}
+
+	return response.Data, nil
+}
+
+// Compile-time interface compliance check
+var _ TrafficClassServiceInterface = (*TrafficClassService)(nil)
