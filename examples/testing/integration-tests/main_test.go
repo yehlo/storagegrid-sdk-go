@@ -130,7 +130,7 @@ func TestGridClient_TenantManagement(t *testing.T) {
 	tenantName := fmt.Sprintf("test-tenant-%d", time.Now().Unix())
 
 	// Create tenant
-	tenant := &models.Tenant{
+	tenant := &tenant.Tenant{
 		Name:         &tenantName,
 		Capabilities: []string{"s3", "management"},
 	}
@@ -213,7 +213,7 @@ func TestTenantClient_BucketOperations(t *testing.T) {
 	bucketName := fmt.Sprintf("test-bucket-%d", time.Now().Unix())
 
 	// Create bucket
-	bucket := &models.Bucket{
+	bucket := &bucket.Bucket{
 		Name:   bucketName,
 		Region: "us-east-1",
 	}

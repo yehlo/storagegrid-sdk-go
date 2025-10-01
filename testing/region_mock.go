@@ -3,10 +3,10 @@ package testing
 import (
 	"context"
 
-	"github.com/yehlo/storagegrid-sdk-go/services"
+	"github.com/yehlo/storagegrid-sdk-go/services/region"
 )
 
-// MockRegionService implements services.RegionServiceInterface for testing
+// MockRegionService implements region.ServiceInterface for testing
 type MockRegionService struct {
 	ListFunc func(ctx context.Context) ([]string, error)
 }
@@ -19,4 +19,4 @@ func (m *MockRegionService) List(ctx context.Context) ([]string, error) {
 }
 
 // Compile-time interface compliance check
-var _ services.RegionServiceInterface = (*MockRegionService)(nil)
+var _ region.ServiceInterface = (*MockRegionService)(nil)

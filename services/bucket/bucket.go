@@ -1,10 +1,12 @@
-package services
+package bucket
 
 import (
 	"context"
 	"fmt"
 
 	"github.com/yehlo/storagegrid-sdk-go/models"
+	"github.com/yehlo/storagegrid-sdk-go/services"
+	"github.com/yehlo/storagegrid-sdk-go/services/tenantusage"
 )
 
 const (
@@ -12,27 +14,27 @@ const (
 	tenantUsageEndpoint string = "/org/usage"
 )
 
-// BucketServiceInterface defines the contract for bucket service operations
-type BucketServiceInterface interface {
-	List(ctx context.Context) ([]models.Bucket, error)
-	GetByName(ctx context.Context, name string) (*models.Bucket, error)
-	Create(ctx context.Context, bucket *models.Bucket) (*models.Bucket, error)
-	GetUsage(ctx context.Context, name string) (*models.BucketStats, error)
+// ServiceInterface defines the contract for bucket service operations
+type ServiceInterface interface {
+	List(ctx context.Context) ([]Bucket, error)
+	GetByName(ctx context.Context, name string) (*Bucket, error)
+	Create(ctx context.Context, bucket *Bucket) (*Bucket, error)
+	GetUsage(ctx context.Context, name string) (*tenantusage.BucketStats, error)
 	Delete(ctx context.Context, name string) error
-	Drain(ctx context.Context, name string) (*models.BucketDeleteObjectStatus, error)
-	DrainStatus(ctx context.Context, name string) (*models.BucketDeleteObjectStatus, error)
+	Drain(ctx context.Context, name string) (*DeleteObjectStatus, error)
+	DrainStatus(ctx context.Context, name string) (*DeleteObjectStatus, error)
 }
 
-type BucketService struct {
-	client HTTPClient
+type Service struct {
+	client services.HTTPClient
 }
 
-func NewBucketService(client HTTPClient) *BucketService {
-	return &BucketService{client: client}
+func NewService(client services.HTTPClient) *Service {
+	return &Service{client: client}
 }
 
-func (s *BucketService) List(ctx context.Context) ([]models.Bucket, error) {
-	var response models.Response[[]models.Bucket]
+func (s *Service) List(ctx context.Context) ([]Bucket, error) {
+	var response models.Response[[]Bucket]
 	err := s.client.DoParsed(ctx, "GET", bucketEndpoint, nil, &response)
 	if err != nil {
 		return nil, err
@@ -41,7 +43,7 @@ func (s *BucketService) List(ctx context.Context) ([]models.Bucket, error) {
 	return response.Data, nil
 }
 
-func (s *BucketService) GetByName(ctx context.Context, name string) (*models.Bucket, error) {
+func (s *Service) GetByName(ctx context.Context, name string) (*Bucket, error) {
 	// the bucket endpoint doesn't have a simple get by name, so we have to list all buckets and find the one we want
 	buckets, err := s.List(ctx)
 	if err != nil {
@@ -57,8 +59,8 @@ func (s *BucketService) GetByName(ctx context.Context, name string) (*models.Buc
 	return nil, fmt.Errorf("bucket with name %s not found", name)
 }
 
-func (s *BucketService) Create(ctx context.Context, bucket *models.Bucket) (*models.Bucket, error) {
-	var response models.Response[*models.Bucket]
+func (s *Service) Create(ctx context.Context, bucket *Bucket) (*Bucket, error) {
+	var response models.Response[*Bucket]
 	if err := s.client.DoParsed(ctx, "POST", bucketEndpoint, bucket, &response); err != nil {
 		return nil, err
 	}
@@ -66,8 +68,8 @@ func (s *BucketService) Create(ctx context.Context, bucket *models.Bucket) (*mod
 	return response.Data, nil
 }
 
-func (s *BucketService) GetUsage(ctx context.Context, name string) (*models.BucketStats, error) {
-	var response models.Response[models.TenantUsage]
+func (s *Service) GetUsage(ctx context.Context, name string) (*tenantusage.BucketStats, error) {
+	var response models.Response[tenantusage.TenantUsage]
 	if err := s.client.DoParsed(ctx, "GET", tenantUsageEndpoint, nil, &response); err != nil {
 		return nil, err
 	}
@@ -81,13 +83,13 @@ func (s *BucketService) GetUsage(ctx context.Context, name string) (*models.Buck
 	return nil, fmt.Errorf("usage for bucket with name %s not found", name)
 }
 
-func (s *BucketService) Delete(ctx context.Context, name string) error {
+func (s *Service) Delete(ctx context.Context, name string) error {
 	return s.client.DoParsed(ctx, "DELETE", bucketEndpoint+"/"+name, nil, nil)
 }
 
 // Drain a bucket by name. This will delete all objects in the bucket but leave the bucket itself intact.
-func (s *BucketService) Drain(ctx context.Context, name string) (*models.BucketDeleteObjectStatus, error) {
-	var response models.Response[*models.BucketDeleteObjectStatus]
+func (s *Service) Drain(ctx context.Context, name string) (*DeleteObjectStatus, error) {
+	var response models.Response[*DeleteObjectStatus]
 	body := map[string]string{"deleteObjects": "true"}
 
 	if err := s.client.DoParsed(ctx, "POST", bucketEndpoint+"/"+name+"/delete-objects", body, &response); err != nil {
@@ -97,8 +99,8 @@ func (s *BucketService) Drain(ctx context.Context, name string) (*models.BucketD
 	return response.Data, nil
 }
 
-func (s *BucketService) DrainStatus(ctx context.Context, name string) (*models.BucketDeleteObjectStatus, error) {
-	var response models.Response[*models.BucketDeleteObjectStatus]
+func (s *Service) DrainStatus(ctx context.Context, name string) (*DeleteObjectStatus, error) {
+	var response models.Response[*DeleteObjectStatus]
 
 	if err := s.client.DoParsed(ctx, "GET", bucketEndpoint+"/"+name+"/delete-objects", nil, &response); err != nil {
 		return nil, err

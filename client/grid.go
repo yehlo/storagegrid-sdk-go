@@ -3,7 +3,12 @@ package client
 import (
 	"net/url"
 
-	"github.com/yehlo/storagegrid-sdk-go/services"
+	"github.com/yehlo/storagegrid-sdk-go/services/gatewayconfig"
+	"github.com/yehlo/storagegrid-sdk-go/services/hagroup"
+	"github.com/yehlo/storagegrid-sdk-go/services/health"
+	"github.com/yehlo/storagegrid-sdk-go/services/region"
+	"github.com/yehlo/storagegrid-sdk-go/services/tenant"
+	trafficclasses "github.com/yehlo/storagegrid-sdk-go/services/trafficclasses"
 )
 
 const (
@@ -15,12 +20,12 @@ type GridClient struct {
 	client *Client
 
 	// Services
-	tenant       services.TenantServiceInterface
-	health       services.HealthServiceInterface
-	region       services.RegionServiceInterface
-	haGroup      services.HAGroupServiceInterface
-	gateway      services.GatewayConfigServiceInterface
-	trafficClass services.TrafficClassServiceInterface
+	tenant       tenant.ServiceInterface
+	health       health.ServiceInterface
+	region       region.ServiceInterface
+	haGroup      hagroup.ServiceInterface
+	gateway      gatewayconfig.ServiceInterface
+	trafficClass trafficclasses.ServiceInterface
 }
 
 func NewGridClient(options ...Option) (*GridClient, error) {
@@ -33,36 +38,36 @@ func NewGridClient(options ...Option) (*GridClient, error) {
 
 	return &GridClient{
 		client:       c,
-		tenant:       services.NewTenantService(c),
-		health:       services.NewHealthService(c),
-		region:       services.NewRegionGridService(c),
-		haGroup:      services.NewHAGroupService(c),
-		gateway:      services.NewGatewayConfigService(c),
-		trafficClass: services.NewTrafficClassService(c),
+		tenant:       tenant.NewService(c),
+		health:       health.NewService(c),
+		region:       region.NewGridService(c),
+		haGroup:      hagroup.NewService(c),
+		gateway:      gatewayconfig.NewService(c),
+		trafficClass: trafficclasses.NewService(c),
 	}, nil
 }
 
 // Service getters return interfaces to enable testing with mocks
-func (gc *GridClient) TrafficClass() services.TrafficClassServiceInterface {
+func (gc *GridClient) TrafficClass() trafficclasses.ServiceInterface {
 	return gc.trafficClass
 }
 
-func (gc *GridClient) Tenant() services.TenantServiceInterface {
+func (gc *GridClient) Tenant() tenant.ServiceInterface {
 	return gc.tenant
 }
 
-func (gc *GridClient) Health() services.HealthServiceInterface {
+func (gc *GridClient) Health() health.ServiceInterface {
 	return gc.health
 }
 
-func (gc *GridClient) Region() services.RegionServiceInterface {
+func (gc *GridClient) Region() region.ServiceInterface {
 	return gc.region
 }
 
-func (gc *GridClient) HAGroup() services.HAGroupServiceInterface {
+func (gc *GridClient) HAGroup() hagroup.ServiceInterface {
 	return gc.haGroup
 }
 
-func (gc *GridClient) Gateway() services.GatewayConfigServiceInterface {
+func (gc *GridClient) Gateway() gatewayconfig.ServiceInterface {
 	return gc.gateway
 }

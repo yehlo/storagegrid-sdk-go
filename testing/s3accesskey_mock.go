@@ -3,53 +3,52 @@ package testing
 import (
 	"context"
 
-	"github.com/yehlo/storagegrid-sdk-go/models"
-	"github.com/yehlo/storagegrid-sdk-go/services"
+	"github.com/yehlo/storagegrid-sdk-go/services/accesskeys"
 )
 
-// MockS3AccessKeyService implements services.S3AccessKeyServiceInterface for testing
+// MockS3AccessKeyService implements accesskeys.ServiceInterface for testing
 type MockS3AccessKeyService struct {
-	ListForCurrentUserFunc    func(ctx context.Context) ([]models.S3AccessKey, error)
-	ListForUserFunc           func(ctx context.Context, userID string) ([]models.S3AccessKey, error)
-	GetByIDForCurrentUserFunc func(ctx context.Context, id string) (*models.S3AccessKey, error)
-	GetByIDForUserFunc        func(ctx context.Context, userID string, id string) (*models.S3AccessKey, error)
-	CreateForCurrentUserFunc  func(ctx context.Context, s3AccessKey *models.S3AccessKey) (*models.S3AccessKey, error)
-	CreateForUserFunc         func(ctx context.Context, userID string, s3AccessKey *models.S3AccessKey) (*models.S3AccessKey, error)
+	ListForCurrentUserFunc    func(ctx context.Context) ([]accesskeys.S3AccessKey, error)
+	ListForUserFunc           func(ctx context.Context, userID string) ([]accesskeys.S3AccessKey, error)
+	GetByIDForCurrentUserFunc func(ctx context.Context, id string) (*accesskeys.S3AccessKey, error)
+	GetByIDForUserFunc        func(ctx context.Context, userID string, id string) (*accesskeys.S3AccessKey, error)
+	CreateForCurrentUserFunc  func(ctx context.Context, s3AccessKey *accesskeys.S3AccessKey) (*accesskeys.S3AccessKey, error)
+	CreateForUserFunc         func(ctx context.Context, userID string, s3AccessKey *accesskeys.S3AccessKey) (*accesskeys.S3AccessKey, error)
 	DeleteForCurrentUserFunc  func(ctx context.Context, id string) error
 	DeleteForUserFunc         func(ctx context.Context, userID string, id string) error
 }
 
-func (m *MockS3AccessKeyService) ListForCurrentUser(ctx context.Context) ([]models.S3AccessKey, error) {
+func (m *MockS3AccessKeyService) ListForCurrentUser(ctx context.Context) ([]accesskeys.S3AccessKey, error) {
 	if m.ListForCurrentUserFunc != nil {
 		return m.ListForCurrentUserFunc(ctx)
 	}
-	return []models.S3AccessKey{}, nil
+	return []accesskeys.S3AccessKey{}, nil
 }
 
-func (m *MockS3AccessKeyService) ListForUser(ctx context.Context, userID string) ([]models.S3AccessKey, error) {
+func (m *MockS3AccessKeyService) ListForUser(ctx context.Context, userID string) ([]accesskeys.S3AccessKey, error) {
 	if m.ListForUserFunc != nil {
 		return m.ListForUserFunc(ctx, userID)
 	}
-	return []models.S3AccessKey{}, nil
+	return []accesskeys.S3AccessKey{}, nil
 }
 
-func (m *MockS3AccessKeyService) GetByIDForCurrentUser(ctx context.Context, id string) (*models.S3AccessKey, error) {
+func (m *MockS3AccessKeyService) GetByIDForCurrentUser(ctx context.Context, id string) (*accesskeys.S3AccessKey, error) {
 	if m.GetByIDForCurrentUserFunc != nil {
 		return m.GetByIDForCurrentUserFunc(ctx, id)
 	}
 	mockID := id
-	return &models.S3AccessKey{ID: &mockID}, nil
+	return &accesskeys.S3AccessKey{ID: &mockID}, nil
 }
 
-func (m *MockS3AccessKeyService) GetByIDForUser(ctx context.Context, userID string, id string) (*models.S3AccessKey, error) {
+func (m *MockS3AccessKeyService) GetByIDForUser(ctx context.Context, userID string, id string) (*accesskeys.S3AccessKey, error) {
 	if m.GetByIDForUserFunc != nil {
 		return m.GetByIDForUserFunc(ctx, userID, id)
 	}
 	mockID := id
-	return &models.S3AccessKey{ID: &mockID}, nil
+	return &accesskeys.S3AccessKey{ID: &mockID}, nil
 }
 
-func (m *MockS3AccessKeyService) CreateForCurrentUser(ctx context.Context, s3AccessKey *models.S3AccessKey) (*models.S3AccessKey, error) {
+func (m *MockS3AccessKeyService) CreateForCurrentUser(ctx context.Context, s3AccessKey *accesskeys.S3AccessKey) (*accesskeys.S3AccessKey, error) {
 	if m.CreateForCurrentUserFunc != nil {
 		return m.CreateForCurrentUserFunc(ctx, s3AccessKey)
 	}
@@ -58,7 +57,7 @@ func (m *MockS3AccessKeyService) CreateForCurrentUser(ctx context.Context, s3Acc
 	return s3AccessKey, nil
 }
 
-func (m *MockS3AccessKeyService) CreateForUser(ctx context.Context, userID string, s3AccessKey *models.S3AccessKey) (*models.S3AccessKey, error) {
+func (m *MockS3AccessKeyService) CreateForUser(ctx context.Context, userID string, s3AccessKey *accesskeys.S3AccessKey) (*accesskeys.S3AccessKey, error) {
 	if m.CreateForUserFunc != nil {
 		return m.CreateForUserFunc(ctx, userID, s3AccessKey)
 	}
@@ -82,4 +81,4 @@ func (m *MockS3AccessKeyService) DeleteForUser(ctx context.Context, userID strin
 }
 
 // Compile-time interface compliance check
-var _ services.S3AccessKeyServiceInterface = (*MockS3AccessKeyService)(nil)
+var _ accesskeys.ServiceInterface = (*MockS3AccessKeyService)(nil)

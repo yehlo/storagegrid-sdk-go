@@ -3,21 +3,20 @@ package testing
 import (
 	"context"
 
-	"github.com/yehlo/storagegrid-sdk-go/models"
-	"github.com/yehlo/storagegrid-sdk-go/services"
+	"github.com/yehlo/storagegrid-sdk-go/services/health"
 )
 
-// MockHealthService implements services.HealthServiceInterface for testing
+// MockHealthService implements health.ServiceInterface for testing
 type MockHealthService struct {
-	GetFunc func(ctx context.Context) (*models.Health, error)
+	GetFunc func(ctx context.Context) (*health.Health, error)
 }
 
-func (m *MockHealthService) Get(ctx context.Context) (*models.Health, error) {
+func (m *MockHealthService) Get(ctx context.Context) (*health.Health, error) {
 	if m.GetFunc != nil {
 		return m.GetFunc(ctx)
 	}
-	return &models.Health{}, nil
+	return &health.Health{}, nil
 }
 
 // Compile-time interface compliance check
-var _ services.HealthServiceInterface = (*MockHealthService)(nil)
+var _ health.ServiceInterface = (*MockHealthService)(nil)

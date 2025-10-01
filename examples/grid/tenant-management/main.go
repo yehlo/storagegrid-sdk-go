@@ -10,6 +10,7 @@ import (
 
 	"github.com/yehlo/storagegrid-sdk-go/client"
 	"github.com/yehlo/storagegrid-sdk-go/models"
+	"github.com/yehlo/storagegrid-sdk-go/services/tenant"
 )
 
 func main() {
@@ -112,11 +113,11 @@ func createExampleTenant(ctx context.Context, client *client.GridClient) error {
 	}
 
 	// Create new tenant
-	newTenant := &models.Tenant{
+	newTenant := &tenant.Tenant{
 		Name:         stringPtr("example-tenant"),
 		Description:  stringPtr("Example tenant created by SDK"),
 		Capabilities: []string{"management", "s3"},
-		Policy: &models.TenantPolicy{
+		Policy: &tenant.TenantPolicy{
 			UseAccountIdentitySource: false,
 			AllowPlatformServices:    true,
 			AllowSelectObjectContent: boolPtr(true),

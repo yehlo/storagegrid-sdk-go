@@ -1,4 +1,4 @@
-package models
+package gatewayconfig
 
 type GatewayConfig struct {
 	// ID is the unique identifier of the load balancer endpoint.
@@ -18,9 +18,9 @@ type GatewayConfig struct {
 }
 
 type PinTargets struct {
-	HaGroups       *[]string         `json:"haGroups,omitempty"`
-	NodeInterfaces *[]NodeInterfaces `json:"nodeInterfaces,omitempty"`
-	NodeTypes      *[]string         `json:"nodeTypes,omitempty"`
+	HaGroups       []string         `json:"haGroups,omitempty"`
+	NodeInterfaces []NodeInterfaces `json:"nodeInterfaces,omitempty"`
+	NodeTypes      []string         `json:"nodeTypes,omitempty"`
 }
 
 type NodeInterfaces struct {
@@ -36,7 +36,7 @@ type ManagementInterfaces struct {
 type GWServerConfig struct {
 	DefaultServiceType     *string            `json:"defaultServiceType,omitempty"`
 	AccountRestrictionMode *string            `json:"accountRestrictionMode,omitempty"`
-	AccountRestrictions    *[]string          `json:"accountRestrictions,omitempty"`
+	AccountRestrictions    []string           `json:"accountRestrictions,omitempty"`
 	CertSource             *string            `json:"certSource,omitempty"`
 	PlaintextCertData      *PlaintextCertData `json:"plaintextCertData,omitempty"`
 }
@@ -49,7 +49,7 @@ type PlaintextCertData struct {
 
 type Metadata struct {
 	ServerCertificateDetails *ServerCertificateDetails `json:"serverCertificateDetails,omitempty"`
-	CaBundleDetails          *[]CaBundleDetails        `json:"caBundleDetails,omitempty"`
+	CaBundleDetails          []CaBundleDetails         `json:"caBundleDetails,omitempty"`
 }
 
 type ServerCertificateDetails struct {
@@ -60,7 +60,7 @@ type ServerCertificateDetails struct {
 	NotBefore       *string       `json:"notBefore,omitempty"`
 	NotAfter        *string       `json:"notAfter,omitempty"`
 	FingerPrints    *FingerPrints `json:"fingerPrints,omitempty"`
-	SubjectAltNames *[]string     `json:"subjectAltNames,omitempty"`
+	SubjectAltNames []string      `json:"subjectAltNames,omitempty"`
 	KeyUsage        *string       `json:"keyUsage,omitempty"`
 }
 

@@ -1,14 +1,6 @@
-package models
+package tenantusage
 
 import "time"
-
-// TenantUsage represents the usage statistics of a tenant.
-type TenantUsage struct {
-	CalculationTime *time.Time    `json:"calculationTime,omitempty"` // The time the calculation was performed.
-	ObjectCount     *int64        `json:"objectCount,omitempty"`     // Total number of objects.
-	DataBytes       *int64        `json:"dataBytes,omitempty"`       // Total size of data in bytes.
-	Buckets         []BucketStats `json:"buckets,omitempty"`         // List of bucket-specific statistics.
-}
 
 // BucketStats represents the statistics of a specific bucket.
 type BucketStats struct {
@@ -20,4 +12,12 @@ type BucketStats struct {
 	VersioningEnabled   *bool   `json:"versioningEnabled,omitempty"`   // Indicates if versioning is enabled.
 	VersioningSuspended *bool   `json:"versioningSuspended,omitempty"` // Indicates if versioning is suspended.
 	Region              *string `json:"region,omitempty"`              // The region where the bucket is located (e.g., "us-east-1").
+}
+
+// TenantUsage represents the usage statistics of a tenant.
+type TenantUsage struct {
+	CalculationTime *time.Time    `json:"calculationTime,omitempty"` // The time the calculation was performed.
+	ObjectCount     *int64        `json:"objectCount,omitempty"`     // Total number of objects.
+	DataBytes       *int64        `json:"dataBytes,omitempty"`       // Total size of data in bytes.
+	Buckets         []BucketStats `json:"buckets,omitempty"`         // List of bucket-specific statistics.
 }

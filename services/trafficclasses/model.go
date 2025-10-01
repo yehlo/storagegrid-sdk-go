@@ -1,4 +1,4 @@
-package models
+package trafficclasses
 
 type TrafficClass struct {
 	ID          string  `json:"id"`                    // a unique identifier for the traffic class (automatically assigned when a traffic class is created)
@@ -6,7 +6,7 @@ type TrafficClass struct {
 	Description *string `json:"description,omitempty"` // A description of the policy
 }
 
-type TrafficClassPolicy struct {
+type Policy struct {
 	ID          string     `json:"id,omitempty"`
 	Name        string     `json:"name"`
 	Description *string    `json:"description,omitempty"`

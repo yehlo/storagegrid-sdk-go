@@ -47,7 +47,7 @@ The example includes:
 
 ```go
 mockTenantService := &sgTesting.MockTenantService{}
-mockTenantService.CreateFunc = func(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error) {
+mockTenantService.CreateFunc = func(ctx context.Context, tenant *tenant.Tenant) (*tenant.Tenant, error) {
     tenant.ID = "tenant-123"
     return tenant, nil
 }
@@ -68,7 +68,7 @@ Each test case can specify expected errors and validate error messages:
 {
     name: "tenant creation fails",
     setupMocks: func(mockTenant *sgTesting.MockTenantService, mockBucket *sgTesting.MockBucketService) {
-        mockTenant.CreateFunc = func(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error) {
+        mockTenant.CreateFunc = func(ctx context.Context, tenant *tenant.Tenant) (*tenant.Tenant, error) {
             return nil, errors.New("tenant creation failed")
         }
     },

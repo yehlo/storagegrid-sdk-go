@@ -1,4 +1,4 @@
-package models
+package tenant
 
 type Tenant struct {
 	Name             *string                      `json:"name,omitempty"`         // the descriptive name specified for the account (This name is for display only and might not be unique.)

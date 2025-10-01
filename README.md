@@ -164,11 +164,11 @@ if err != nil {
 }
 
 // Create a new tenant
-tenant := &models.Tenant{
+tenant := &tenant.Tenant{
 	Name:         "my-tenant",
 	Description:  "Some description",
 	Capabilities: []string{"management", "s3"},
-	Policy: &models.TenantPolicy{
+	Policy: &tenant.TenantPolicy{
 		UseAccountIdentitySource: false,
 		AllowPlatformServices:    true,
 		QuotaObjectBytes:         100 * 1024 * 1024 * 1024, // 100GB
@@ -228,11 +228,11 @@ if err != nil {
 
 ```go
 // Create a bucket with versioning enabled
-bucket := &models.Bucket{
+bucket := &bucket.Bucket{
 	Name:             "my-application-data",
 	Region:           "us-east-1",
 	EnableVersioning: true,
-	S3ObjectLock: &models.BucketS3ObjectLockSettings{
+	S3ObjectLock: &bucket.S3ObjectLockSettings{
 		Enabled: false,
 	},
 }
@@ -257,7 +257,7 @@ for _, bucket := range *buckets {
 
 ```go
 // Create a new user
-user := &models.User{
+user := &tenantuser.User{
 	UniqueName:  "application-user", // Will be prefixed with "user/"
 	DisplayName: "Application Service User",
 	Disable:     false,
@@ -269,7 +269,7 @@ if err != nil {
 }
 
 // Generate S3 access keys for the user
-accessKey := &models.S3AccessKey{
+accessKey := &accesskeys.S3AccessKey{
 	Expires: nil, // No expiration
 }
 
@@ -305,7 +305,7 @@ fmt.Printf("Grid Status: All Green = %v\n", health.AllGreen())
 
 #### Create Tenant
 ```go
-tenant := &models.Tenant{
+tenant := &tenant.Tenant{
     Name:         "my-tenant",
     Capabilities: []string{"s3", "management"},
 }
@@ -314,7 +314,7 @@ createdTenant, err := gridClient.Tenant().Create(ctx, tenant)
 
 #### Create Bucket
 ```go
-bucket := &models.Bucket{
+bucket := &bucket.Bucket{
     Name:   "my-bucket",
     Region: "us-east-1",
 }
@@ -347,15 +347,15 @@ func TestTenantOperations(t *testing.T) {
 
 	// Create mock tenant service
 	mockService := &testing.MockTenantService{
-		ListFunc: func(ctx context.Context) (*[]models.Tenant, error) {
-			return &[]models.Tenant{
+		ListFunc: func(ctx context.Context) ([]tenant.Tenant, error) {
+			return &[]tenant.Tenant{
 				{
 					ID:   "tenant-123",
 					Name: "Test Tenant",
 				},
 			}, nil
 		},
-		CreateFunc: func(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error) {
+		CreateFunc: func(ctx context.Context, tenant *tenant.Tenant) (*tenant.Tenant, error) {
 			tenant.ID = "new-tenant-456"
 			return tenant, nil
 		},

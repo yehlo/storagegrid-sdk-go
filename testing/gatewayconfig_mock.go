@@ -3,36 +3,35 @@ package testing
 import (
 	"context"
 
-	"github.com/yehlo/storagegrid-sdk-go/models"
-	"github.com/yehlo/storagegrid-sdk-go/services"
+	"github.com/yehlo/storagegrid-sdk-go/services/gatewayconfig"
 )
 
-// MockGatewayConfigService implements services.GatewayConfigServiceInterface for testing
+// MockGatewayConfigService implements gatewayconfig.ServiceInterface for testing
 type MockGatewayConfigService struct {
-	ListGatewayConfigsFunc        func(ctx context.Context) ([]models.GatewayConfig, error)
-	GetGatewayConfigByIDFunc      func(ctx context.Context, id string) (*models.GatewayConfig, error)
-	CreateGatewayConfigFunc       func(ctx context.Context, gatewayConfig *models.GatewayConfig) (*models.GatewayConfig, error)
-	UpdateGatewayConfigFunc       func(ctx context.Context, gatewayConfig *models.GatewayConfig) (*models.GatewayConfig, error)
+	ListGatewayConfigsFunc        func(ctx context.Context) ([]gatewayconfig.GatewayConfig, error)
+	GetGatewayConfigByIDFunc      func(ctx context.Context, id string) (*gatewayconfig.GatewayConfig, error)
+	CreateGatewayConfigFunc       func(ctx context.Context, gatewayConfig *gatewayconfig.GatewayConfig) (*gatewayconfig.GatewayConfig, error)
+	UpdateGatewayConfigFunc       func(ctx context.Context, gatewayConfig *gatewayconfig.GatewayConfig) (*gatewayconfig.GatewayConfig, error)
 	DeleteGatewayConfigFunc       func(ctx context.Context, id string) error
-	GetGatewayServerConfigFunc    func(ctx context.Context, gatewayID string) (*models.GWServerConfig, error)
-	UpdateGatewayServerConfigFunc func(ctx context.Context, gatewayID string, gatewayServerConfig *models.GWServerConfig) (*models.GWServerConfig, error)
+	GetGatewayServerConfigFunc    func(ctx context.Context, gatewayID string) (*gatewayconfig.GWServerConfig, error)
+	UpdateGatewayServerConfigFunc func(ctx context.Context, gatewayID string, gatewayServerConfig *gatewayconfig.GWServerConfig) (*gatewayconfig.GWServerConfig, error)
 }
 
-func (m *MockGatewayConfigService) ListGatewayConfigs(ctx context.Context) ([]models.GatewayConfig, error) {
+func (m *MockGatewayConfigService) List(ctx context.Context) ([]gatewayconfig.GatewayConfig, error) {
 	if m.ListGatewayConfigsFunc != nil {
 		return m.ListGatewayConfigsFunc(ctx)
 	}
-	return []models.GatewayConfig{}, nil
+	return []gatewayconfig.GatewayConfig{}, nil
 }
 
-func (m *MockGatewayConfigService) GetGatewayConfigByID(ctx context.Context, id string) (*models.GatewayConfig, error) {
+func (m *MockGatewayConfigService) GetByID(ctx context.Context, id string) (*gatewayconfig.GatewayConfig, error) {
 	if m.GetGatewayConfigByIDFunc != nil {
 		return m.GetGatewayConfigByIDFunc(ctx, id)
 	}
-	return &models.GatewayConfig{ID: id}, nil
+	return &gatewayconfig.GatewayConfig{ID: id}, nil
 }
 
-func (m *MockGatewayConfigService) CreateGatewayConfig(ctx context.Context, gatewayConfig *models.GatewayConfig) (*models.GatewayConfig, error) {
+func (m *MockGatewayConfigService) Create(ctx context.Context, gatewayConfig *gatewayconfig.GatewayConfig) (*gatewayconfig.GatewayConfig, error) {
 	if m.CreateGatewayConfigFunc != nil {
 		return m.CreateGatewayConfigFunc(ctx, gatewayConfig)
 	}
@@ -40,28 +39,28 @@ func (m *MockGatewayConfigService) CreateGatewayConfig(ctx context.Context, gate
 	return gatewayConfig, nil
 }
 
-func (m *MockGatewayConfigService) UpdateGatewayConfig(ctx context.Context, gatewayConfig *models.GatewayConfig) (*models.GatewayConfig, error) {
+func (m *MockGatewayConfigService) Update(ctx context.Context, gatewayConfig *gatewayconfig.GatewayConfig) (*gatewayconfig.GatewayConfig, error) {
 	if m.UpdateGatewayConfigFunc != nil {
 		return m.UpdateGatewayConfigFunc(ctx, gatewayConfig)
 	}
 	return gatewayConfig, nil
 }
 
-func (m *MockGatewayConfigService) DeleteGatewayConfig(ctx context.Context, id string) error {
+func (m *MockGatewayConfigService) Delete(ctx context.Context, id string) error {
 	if m.DeleteGatewayConfigFunc != nil {
 		return m.DeleteGatewayConfigFunc(ctx, id)
 	}
 	return nil
 }
 
-func (m *MockGatewayConfigService) GetGatewayServerConfig(ctx context.Context, gatewayID string) (*models.GWServerConfig, error) {
+func (m *MockGatewayConfigService) GetServerConfig(ctx context.Context, gatewayID string) (*gatewayconfig.GWServerConfig, error) {
 	if m.GetGatewayServerConfigFunc != nil {
 		return m.GetGatewayServerConfigFunc(ctx, gatewayID)
 	}
-	return &models.GWServerConfig{}, nil
+	return &gatewayconfig.GWServerConfig{}, nil
 }
 
-func (m *MockGatewayConfigService) UpdateGatewayServerConfig(ctx context.Context, gatewayID string, gatewayServerConfig *models.GWServerConfig) (*models.GWServerConfig, error) {
+func (m *MockGatewayConfigService) UpdateServerConfig(ctx context.Context, gatewayID string, gatewayServerConfig *gatewayconfig.GWServerConfig) (*gatewayconfig.GWServerConfig, error) {
 	if m.UpdateGatewayServerConfigFunc != nil {
 		return m.UpdateGatewayServerConfigFunc(ctx, gatewayID, gatewayServerConfig)
 	}
@@ -69,4 +68,4 @@ func (m *MockGatewayConfigService) UpdateGatewayServerConfig(ctx context.Context
 }
 
 // Compile-time interface compliance check
-var _ services.GatewayConfigServiceInterface = (*MockGatewayConfigService)(nil)
+var _ gatewayconfig.ServiceInterface = (*MockGatewayConfigService)(nil)

@@ -95,7 +95,7 @@ go run main.go
 ## Tenant Policy Options
 
 ```go
-Policy: &models.TenantPolicy{
+Policy: &tenant.TenantPolicy{
     UseAccountIdentitySource: false,           // Use grid identity source
     AllowPlatformServices:    true,            // Enable CloudMirror, etc.
     AllowSelectObjectContent: boolPtr(true),   // Enable S3 Select

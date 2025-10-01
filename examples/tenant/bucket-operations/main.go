@@ -9,6 +9,7 @@ import (
 
 	"github.com/yehlo/storagegrid-sdk-go/client"
 	"github.com/yehlo/storagegrid-sdk-go/models"
+	"github.com/yehlo/storagegrid-sdk-go/services/bucket"
 )
 
 func main() {
@@ -140,7 +141,7 @@ func createExampleBuckets(ctx context.Context, client *client.TenantClient) erro
 		}
 
 		// Create bucket
-		bucket := &models.Bucket{
+		b := &bucket.Bucket{
 			Name:             config.name,
 			Region:           "us-east-1",
 			EnableVersioning: &config.versioning,
@@ -148,16 +149,16 @@ func createExampleBuckets(ctx context.Context, client *client.TenantClient) erro
 
 		// Configure S3 Object Lock if requested
 		if config.objectLock {
-			bucket.S3ObjectLock = &models.BucketS3ObjectLockSettings{
+			b.S3ObjectLock = &bucket.S3ObjectLockSettings{
 				Enabled: &config.objectLock,
-				DefaultRetentionSetting: &models.BucketS3ObjectLockDefaultRetentionSettings{
+				DefaultRetentionSetting: &bucket.S3ObjectLockDefaultRetentionSettings{
 					Mode:  "COMPLIANCE",
 					Years: 1,
 				},
 			}
 		}
 
-		created, err := client.Bucket().Create(ctx, bucket)
+		created, err := client.Bucket().Create(ctx, b)
 		if err != nil {
 			fmt.Printf("  ❌ Failed to create %s: %v\n", config.name, err)
 			continue
@@ -221,7 +222,7 @@ func manageBucketLifecycle(ctx context.Context, client *client.TenantClient) err
 	tempBucketName := "temp-demo-" + time.Now().Format("20060102-150405")
 
 	fmt.Printf("  Creating temporary bucket: %s\n", tempBucketName)
-	tempBucket := &models.Bucket{
+	tempBucket := &bucket.Bucket{
 		Name:             tempBucketName,
 		Region:           "us-east-1",
 		EnableVersioning: boolPtr(false),

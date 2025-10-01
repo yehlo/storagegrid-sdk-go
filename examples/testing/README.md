@@ -83,7 +83,7 @@ go test -v
 mockTenantService := &sgTesting.MockTenantService{}
 
 // Configure mock behavior
-mockTenantService.CreateFunc = func(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error) {
+mockTenantService.CreateFunc = func(ctx context.Context, tenant *tenant.Tenant) (*tenant.Tenant, error) {
     tenant.ID = "mock-tenant-id"
     return tenant, nil
 }
@@ -103,7 +103,7 @@ gridClient, err := client.NewGridClient(
 )
 
 // Test real operations
-tenant, err := gridClient.Tenant().Create(ctx, &models.Tenant{
+tenant, err := gridClient.Tenant().Create(ctx, &tenant.Tenant{
     Name: &tenantName,
 })
 ```

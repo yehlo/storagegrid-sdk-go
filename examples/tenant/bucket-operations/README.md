@@ -90,7 +90,7 @@ go run main.go
 
   💡 To delete the bucket, you would use:
     client.Bucket().Delete(ctx, "temp-demo-20250115-143025")
-  
+
   ⚠️  Note: Bucket must be empty before deletion
 
   💡 To remove all objects from a bucket:
@@ -108,13 +108,13 @@ go run main.go
 
 ### Configuration Options
 ```go
-bucket := &models.Bucket{
+bucket := &bucket.Bucket{
     Name:             "my-bucket",
     Region:           "us-east-1",
     EnableVersioning: &versioning,
-    S3ObjectLock: &models.BucketS3ObjectLockSettings{
+    S3ObjectLock: &bucket.S3ObjectLockSettings{
         Enabled: &objectLock,
-        DefaultRetentionSetting: &models.BucketS3ObjectLockDefaultRetentionSettings{
+        DefaultRetentionSetting: &S3ObjectLockDefaultRetentionSettings{
             Mode:  "COMPLIANCE",
             Years: 1,
         },
