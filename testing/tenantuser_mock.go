@@ -10,7 +10,7 @@ import (
 // MockTenantUserService implements services.TenantUserServiceInterface for testing
 type MockTenantUserService struct {
 	ListFunc        func(ctx context.Context) ([]models.User, error)
-	GetByIdFunc     func(ctx context.Context, id string) (*models.User, error)
+	GetByIDFunc     func(ctx context.Context, id string) (*models.User, error)
 	GetByNameFunc   func(ctx context.Context, name string) (*models.User, error)
 	CreateFunc      func(ctx context.Context, user *models.User) (*models.User, error)
 	UpdateFunc      func(ctx context.Context, user *models.User) (*models.User, error)
@@ -25,28 +25,28 @@ func (m *MockTenantUserService) List(ctx context.Context) ([]models.User, error)
 	return []models.User{}, nil
 }
 
-func (m *MockTenantUserService) GetById(ctx context.Context, id string) (*models.User, error) {
-	if m.GetByIdFunc != nil {
-		return m.GetByIdFunc(ctx, id)
+func (m *MockTenantUserService) GetByID(ctx context.Context, id string) (*models.User, error) {
+	if m.GetByIDFunc != nil {
+		return m.GetByIDFunc(ctx, id)
 	}
-	mockId := id
-	return &models.User{Id: &mockId}, nil
+	mockID := id
+	return &models.User{ID: &mockID}, nil
 }
 
 func (m *MockTenantUserService) GetByName(ctx context.Context, name string) (*models.User, error) {
 	if m.GetByNameFunc != nil {
 		return m.GetByNameFunc(ctx, name)
 	}
-	mockId := "mock-user-id"
-	return &models.User{Id: &mockId, UniqueName: name}, nil
+	mockID := "mock-user-id"
+	return &models.User{ID: &mockID, UniqueName: name}, nil
 }
 
 func (m *MockTenantUserService) Create(ctx context.Context, user *models.User) (*models.User, error) {
 	if m.CreateFunc != nil {
 		return m.CreateFunc(ctx, user)
 	}
-	mockId := "mock-user-id"
-	user.Id = &mockId
+	mockID := "mock-user-id"
+	user.ID = &mockID
 	return user, nil
 }
 

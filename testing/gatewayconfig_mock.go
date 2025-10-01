@@ -10,7 +10,7 @@ import (
 // MockGatewayConfigService implements services.GatewayConfigServiceInterface for testing
 type MockGatewayConfigService struct {
 	ListGatewayConfigsFunc        func(ctx context.Context) ([]models.GatewayConfig, error)
-	GetGatewayConfigByIdFunc      func(ctx context.Context, id string) (*models.GatewayConfig, error)
+	GetGatewayConfigByIDFunc      func(ctx context.Context, id string) (*models.GatewayConfig, error)
 	CreateGatewayConfigFunc       func(ctx context.Context, gatewayConfig *models.GatewayConfig) (*models.GatewayConfig, error)
 	UpdateGatewayConfigFunc       func(ctx context.Context, gatewayConfig *models.GatewayConfig) (*models.GatewayConfig, error)
 	DeleteGatewayConfigFunc       func(ctx context.Context, id string) error
@@ -25,18 +25,18 @@ func (m *MockGatewayConfigService) ListGatewayConfigs(ctx context.Context) ([]mo
 	return []models.GatewayConfig{}, nil
 }
 
-func (m *MockGatewayConfigService) GetGatewayConfigById(ctx context.Context, id string) (*models.GatewayConfig, error) {
-	if m.GetGatewayConfigByIdFunc != nil {
-		return m.GetGatewayConfigByIdFunc(ctx, id)
+func (m *MockGatewayConfigService) GetGatewayConfigByID(ctx context.Context, id string) (*models.GatewayConfig, error) {
+	if m.GetGatewayConfigByIDFunc != nil {
+		return m.GetGatewayConfigByIDFunc(ctx, id)
 	}
-	return &models.GatewayConfig{Id: id}, nil
+	return &models.GatewayConfig{ID: id}, nil
 }
 
 func (m *MockGatewayConfigService) CreateGatewayConfig(ctx context.Context, gatewayConfig *models.GatewayConfig) (*models.GatewayConfig, error) {
 	if m.CreateGatewayConfigFunc != nil {
 		return m.CreateGatewayConfigFunc(ctx, gatewayConfig)
 	}
-	gatewayConfig.Id = "mock-gateway-id"
+	gatewayConfig.ID = "mock-gateway-id"
 	return gatewayConfig, nil
 }
 

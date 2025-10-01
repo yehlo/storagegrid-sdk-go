@@ -15,7 +15,7 @@ const (
 // GatewayConfigServiceInterface defines the contract for gateway config service operations
 type GatewayConfigServiceInterface interface {
 	ListGatewayConfigs(ctx context.Context) ([]models.GatewayConfig, error)
-	GetGatewayConfigById(ctx context.Context, id string) (*models.GatewayConfig, error)
+	GetGatewayConfigByID(ctx context.Context, id string) (*models.GatewayConfig, error)
 	CreateGatewayConfig(ctx context.Context, gatewayConfig *models.GatewayConfig) (*models.GatewayConfig, error)
 	UpdateGatewayConfig(ctx context.Context, gatewayConfig *models.GatewayConfig) (*models.GatewayConfig, error)
 	DeleteGatewayConfig(ctx context.Context, id string) error
@@ -44,7 +44,7 @@ func (s *GatewayConfigService) ListGatewayConfigs(ctx context.Context) ([]models
 	return response.Data, nil
 }
 
-func (s *GatewayConfigService) GetGatewayConfigById(ctx context.Context, id string) (*models.GatewayConfig, error) {
+func (s *GatewayConfigService) GetGatewayConfigByID(ctx context.Context, id string) (*models.GatewayConfig, error) {
 	var response models.Response[*models.GatewayConfig]
 	if err := s.client.DoParsed(ctx, "GET", gatewayConfigEndpoint+"/"+id, nil, &response); err != nil {
 		return nil, err
@@ -64,7 +64,7 @@ func (s *GatewayConfigService) CreateGatewayConfig(ctx context.Context, gatewayC
 
 func (s *GatewayConfigService) UpdateGatewayConfig(ctx context.Context, gatewayConfig *models.GatewayConfig) (*models.GatewayConfig, error) {
 	var response models.Response[*models.GatewayConfig]
-	if err := s.client.DoParsed(ctx, "PUT", gatewayConfigEndpoint+"/"+gatewayConfig.Id, gatewayConfig, &response); err != nil {
+	if err := s.client.DoParsed(ctx, "PUT", gatewayConfigEndpoint+"/"+gatewayConfig.ID, gatewayConfig, &response); err != nil {
 		return nil, err
 	}
 

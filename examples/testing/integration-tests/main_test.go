@@ -78,7 +78,7 @@ func setupTenantClient(t *testing.T, tenantID string) *client.TenantClient {
 	credentials := &models.Credentials{
 		Username:  username,
 		Password:  password,
-		AccountId: &tenantID,
+		AccountID: &tenantID,
 	}
 
 	tenantClient, err := client.NewTenantClient(
@@ -179,7 +179,7 @@ func TestGridClient_TenantManagement(t *testing.T) {
 	}
 
 	// Get tenant by ID
-	retrievedTenant, err := gridClient.Tenant().GetById(ctx, createdTenant.ID)
+	retrievedTenant, err := gridClient.Tenant().GetByID(ctx, createdTenant.ID)
 	if err != nil {
 		t.Fatalf("Failed to get tenant by ID: %v", err)
 	}
@@ -293,17 +293,17 @@ func TestGridClient_HAGroupOperations(t *testing.T) {
 	// If there are HA groups, test getting details of the first one
 	if len(haGroups) > 0 {
 		haGroup := (haGroups)[0]
-		if haGroup.Id != "" {
-			details, err := gridClient.HAGroup().GetById(ctx, haGroup.Id)
+		if haGroup.ID != "" {
+			details, err := gridClient.HAGroup().GetByID(ctx, haGroup.ID)
 			if err != nil {
 				t.Fatalf("Failed to get HA group details: %v", err)
 			}
 
-			if details.Id != haGroup.Id {
-				t.Fatalf("HA group ID mismatch: expected %s, got %s", haGroup.Id, details.Id)
+			if details.ID != haGroup.ID {
+				t.Fatalf("HA group ID mismatch: expected %s, got %s", haGroup.ID, details.ID)
 			}
 
-			t.Logf("Successfully retrieved HA group: %s", details.Id)
+			t.Logf("Successfully retrieved HA group: %s", details.ID)
 		}
 	}
 }

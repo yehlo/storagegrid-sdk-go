@@ -13,7 +13,7 @@ const (
 // TenantServiceInterface defines the contract for tenant service operations
 type TenantServiceInterface interface {
 	List(ctx context.Context) ([]models.Tenant, error)
-	GetById(ctx context.Context, id string) (*models.Tenant, error)
+	GetByID(ctx context.Context, id string) (*models.Tenant, error)
 	Create(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error)
 	Update(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error)
 	Delete(ctx context.Context, id string) error
@@ -38,7 +38,7 @@ func (s *TenantService) List(ctx context.Context) ([]models.Tenant, error) {
 	return response.Data, nil
 }
 
-func (s *TenantService) GetById(ctx context.Context, id string) (*models.Tenant, error) {
+func (s *TenantService) GetByID(ctx context.Context, id string) (*models.Tenant, error) {
 	var response models.Response[*models.Tenant]
 	err := s.client.DoParsed(ctx, "GET", tenantEndpoint+"/"+id, nil, &response)
 	if err != nil {

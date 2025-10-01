@@ -1,4 +1,4 @@
-// Package cient contains all logic for the storagegrid client
+// Package client contains all logic for the storagegrid client
 package client
 
 import (

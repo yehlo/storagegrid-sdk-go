@@ -14,7 +14,7 @@ const (
 // TenantGroupServiceInterface defines the contract for tenant group service operations
 type TenantGroupServiceInterface interface {
 	List(ctx context.Context) ([]models.TenantGroup, error)
-	GetById(ctx context.Context, id string) (*models.TenantGroup, error)
+	GetByID(ctx context.Context, id string) (*models.TenantGroup, error)
 	GetByName(ctx context.Context, name string) (*models.TenantGroup, error)
 	Create(ctx context.Context, group *models.TenantGroup) (*models.TenantGroup, error)
 	Update(ctx context.Context, group *models.TenantGroup) (*models.TenantGroup, error)
@@ -38,7 +38,7 @@ func (s *TenantGroupService) List(ctx context.Context) ([]models.TenantGroup, er
 	return response.Data, nil
 }
 
-func (s *TenantGroupService) GetById(ctx context.Context, id string) (*models.TenantGroup, error) {
+func (s *TenantGroupService) GetByID(ctx context.Context, id string) (*models.TenantGroup, error) {
 	var response models.Response[*models.TenantGroup]
 	if err := s.client.DoParsed(ctx, "GET", tenantGroupEndpoint+"/"+id, nil, &response); err != nil {
 		return nil, err
@@ -72,7 +72,7 @@ func (s *TenantGroupService) Create(ctx context.Context, group *models.TenantGro
 
 func (s *TenantGroupService) Update(ctx context.Context, group *models.TenantGroup) (*models.TenantGroup, error) {
 	var response models.Response[*models.TenantGroup]
-	if err := s.client.DoParsed(ctx, "PUT", tenantGroupEndpoint+"/"+*group.Id, group, &response); err != nil {
+	if err := s.client.DoParsed(ctx, "PUT", tenantGroupEndpoint+"/"+*group.ID, group, &response); err != nil {
 		return nil, err
 	}
 

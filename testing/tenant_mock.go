@@ -10,7 +10,7 @@ import (
 // MockTenantService implements services.TenantServiceInterface for testing
 type MockTenantService struct {
 	ListFunc     func(ctx context.Context) ([]models.Tenant, error)
-	GetByIdFunc  func(ctx context.Context, id string) (*models.Tenant, error)
+	GetByIDFunc  func(ctx context.Context, id string) (*models.Tenant, error)
 	CreateFunc   func(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error)
 	UpdateFunc   func(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error)
 	DeleteFunc   func(ctx context.Context, id string) error
@@ -24,9 +24,9 @@ func (m *MockTenantService) List(ctx context.Context) ([]models.Tenant, error) {
 	return []models.Tenant{}, nil
 }
 
-func (m *MockTenantService) GetById(ctx context.Context, id string) (*models.Tenant, error) {
-	if m.GetByIdFunc != nil {
-		return m.GetByIdFunc(ctx, id)
+func (m *MockTenantService) GetByID(ctx context.Context, id string) (*models.Tenant, error) {
+	if m.GetByIDFunc != nil {
+		return m.GetByIDFunc(ctx, id)
 	}
 	return &models.Tenant{ID: id}, nil
 }

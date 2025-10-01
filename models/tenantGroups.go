@@ -9,9 +9,9 @@ type TenantGroup struct {
 	ManagementReadOnly *bool                `json:"managementReadOnly,omitempty"`
 	Policies           *TenantGroupPolicies `json:"policies,omitempty"`
 	// Storage Tenant Account ID, or zero for Grid Administrators
-	AccountId *string `json:"accountId,omitempty"`
+	AccountID *string `json:"accountId,omitempty"`
 	// UUID for the Group (generated automatically)
-	Id *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// true if the Group is federated, for example, an LDAP Group
 	Federated *bool `json:"federated,omitempty"`
 	// contains the Group uniqueName and Account ID (generated automatically)

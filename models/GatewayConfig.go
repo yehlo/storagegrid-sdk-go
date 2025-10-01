@@ -2,7 +2,7 @@ package models
 
 type GatewayConfig struct {
 	// ID is the unique identifier of the load balancer endpoint.
-	Id string `json:"id,omitempty"`
+	ID string `json:"id,omitempty"`
 	// Name is the name of the load balancer endpoint.
 	DisplayName *string `json:"displayName,omitempty"`
 	// Port made availablee by the ndpoint

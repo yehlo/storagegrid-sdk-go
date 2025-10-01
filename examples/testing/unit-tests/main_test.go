@@ -99,13 +99,13 @@ func TestTenantManager_CreateTenantWithBucket(t *testing.T) {
 			bucketName: "test-bucket",
 			setupMocks: func(mockTenant *sgTesting.MockTenantService, mockBucket *sgTesting.MockBucketService) {
 				// Mock successful tenant creation
-				mockTenant.CreateFunc = func(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error) {
+				mockTenant.CreateFunc = func(_ context.Context, tenant *models.Tenant) (*models.Tenant, error) {
 					tenant.ID = "tenant-123"
 					return tenant, nil
 				}
 
 				// Mock successful bucket creation
-				mockBucket.CreateFunc = func(ctx context.Context, bucket *models.Bucket) (*models.Bucket, error) {
+				mockBucket.CreateFunc = func(_ context.Context, bucket *models.Bucket) (*models.Bucket, error) {
 					return bucket, nil
 				}
 			},
@@ -115,9 +115,9 @@ func TestTenantManager_CreateTenantWithBucket(t *testing.T) {
 			name:       "tenant creation fails",
 			tenantName: "failing-tenant",
 			bucketName: "test-bucket",
-			setupMocks: func(mockTenant *sgTesting.MockTenantService, mockBucket *sgTesting.MockBucketService) {
+			setupMocks: func(mockTenant *sgTesting.MockTenantService, _ *sgTesting.MockBucketService) {
 				// Mock tenant creation failure
-				mockTenant.CreateFunc = func(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error) {
+				mockTenant.CreateFunc = func(_ context.Context, _ *models.Tenant) (*models.Tenant, error) {
 					return nil, errors.New("tenant creation failed")
 				}
 			},
@@ -130,13 +130,13 @@ func TestTenantManager_CreateTenantWithBucket(t *testing.T) {
 			bucketName: "failing-bucket",
 			setupMocks: func(mockTenant *sgTesting.MockTenantService, mockBucket *sgTesting.MockBucketService) {
 				// Mock successful tenant creation
-				mockTenant.CreateFunc = func(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error) {
+				mockTenant.CreateFunc = func(_ context.Context, tenant *models.Tenant) (*models.Tenant, error) {
 					tenant.ID = "tenant-123"
 					return tenant, nil
 				}
 
 				// Mock bucket creation failure
-				mockBucket.CreateFunc = func(ctx context.Context, bucket *models.Bucket) (*models.Bucket, error) {
+				mockBucket.CreateFunc = func(_ context.Context, _ *models.Bucket) (*models.Bucket, error) {
 					return nil, errors.New("bucket creation failed")
 				}
 			},
@@ -147,9 +147,9 @@ func TestTenantManager_CreateTenantWithBucket(t *testing.T) {
 			name:       "tenant created without ID",
 			tenantName: "no-id-tenant",
 			bucketName: "test-bucket",
-			setupMocks: func(mockTenant *sgTesting.MockTenantService, mockBucket *sgTesting.MockBucketService) {
+			setupMocks: func(mockTenant *sgTesting.MockTenantService, _ *sgTesting.MockBucketService) {
 				// Mock tenant creation returning empty ID
-				mockTenant.CreateFunc = func(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error) {
+				mockTenant.CreateFunc = func(_ context.Context, tenant *models.Tenant) (*models.Tenant, error) {
 					// Don't set ID - simulates invalid response
 					return tenant, nil
 				}
@@ -204,7 +204,7 @@ func TestTenantManager_GetTenantUsageSummary(t *testing.T) {
 			name:     "successful usage retrieval",
 			tenantID: "tenant-123",
 			setupMock: func(mockTenant *sgTesting.MockTenantService) {
-				mockTenant.GetUsageFunc = func(ctx context.Context, id string) (*models.TenantUsage, error) {
+				mockTenant.GetUsageFunc = func(_ context.Context, _ string) (*models.TenantUsage, error) {
 					dataBytes := int64(1024 * 1024 * 1024) // 1GB
 					objectCount := int64(1000)
 
@@ -230,7 +230,7 @@ func TestTenantManager_GetTenantUsageSummary(t *testing.T) {
 			name:     "usage retrieval fails",
 			tenantID: "nonexistent-tenant",
 			setupMock: func(mockTenant *sgTesting.MockTenantService) {
-				mockTenant.GetUsageFunc = func(ctx context.Context, id string) (*models.TenantUsage, error) {
+				mockTenant.GetUsageFunc = func(_ context.Context, _ string) (*models.TenantUsage, error) {
 					return nil, errors.New("tenant not found")
 				}
 			},
@@ -240,7 +240,7 @@ func TestTenantManager_GetTenantUsageSummary(t *testing.T) {
 			name:     "empty usage data",
 			tenantID: "empty-tenant",
 			setupMock: func(mockTenant *sgTesting.MockTenantService) {
-				mockTenant.GetUsageFunc = func(ctx context.Context, id string) (*models.TenantUsage, error) {
+				mockTenant.GetUsageFunc = func(_ context.Context, _ string) (*models.TenantUsage, error) {
 					return &models.TenantUsage{
 						Buckets: []models.BucketStats{},
 					}, nil
@@ -310,7 +310,7 @@ func BenchmarkTenantManager_GetTenantUsageSummary(b *testing.B) {
 
 	// Setup mock
 	mockTenantService := &sgTesting.MockTenantService{}
-	mockTenantService.GetUsageFunc = func(ctx context.Context, id string) (*models.TenantUsage, error) {
+	mockTenantService.GetUsageFunc = func(_ context.Context, _ string) (*models.TenantUsage, error) {
 		dataBytes := int64(1024 * 1024 * 1024)
 		objectCount := int64(1000)
 

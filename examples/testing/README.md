@@ -26,7 +26,7 @@ testing/
 - **Complete coverage** - Test all code paths including error scenarios
 - **Mock-based** - Uses the SDK's built-in mock services
 
-**When to use**: 
+**When to use**:
 - Testing business logic that uses the SDK
 - Validating error handling
 - Continuous integration pipelines
@@ -84,7 +84,7 @@ mockTenantService := &sgTesting.MockTenantService{}
 
 // Configure mock behavior
 mockTenantService.CreateFunc = func(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error) {
-    tenant.Id = "mock-tenant-id"
+    tenant.ID = "mock-tenant-id"
     return tenant, nil
 }
 

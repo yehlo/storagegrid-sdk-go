@@ -15,17 +15,17 @@ const (
 // S3AccessKeyServiceInterface defines the contract for S3 access key service operations
 type S3AccessKeyServiceInterface interface {
 	ListForCurrentUser(ctx context.Context) ([]models.S3AccessKey, error)
-	ListForUser(ctx context.Context, userId string) ([]models.S3AccessKey, error)
-	GetByIdForCurrentUser(ctx context.Context, id string) (*models.S3AccessKey, error)
-	GetByIdForUser(ctx context.Context, userId string, id string) (*models.S3AccessKey, error)
+	ListForUser(ctx context.Context, userID string) ([]models.S3AccessKey, error)
+	GetByIDForCurrentUser(ctx context.Context, id string) (*models.S3AccessKey, error)
+	GetByIDForUser(ctx context.Context, userID string, id string) (*models.S3AccessKey, error)
 	CreateForCurrentUser(ctx context.Context, s3AccessKey *models.S3AccessKey) (*models.S3AccessKey, error)
-	CreateForUser(ctx context.Context, userId string, s3AccessKey *models.S3AccessKey) (*models.S3AccessKey, error)
+	CreateForUser(ctx context.Context, userID string, s3AccessKey *models.S3AccessKey) (*models.S3AccessKey, error)
 	DeleteForCurrentUser(ctx context.Context, id string) error
-	DeleteForUser(ctx context.Context, userId string, id string) error
+	DeleteForUser(ctx context.Context, userID string, id string) error
 }
 
-func getUsers3AccessKeyEndpoint(userId string) string {
-	return fmt.Sprintf(users3AccessKeyEndpoint, userId)
+func getUsers3AccessKeyEndpoint(userID string) string {
+	return fmt.Sprintf(users3AccessKeyEndpoint, userID)
 }
 
 type S3AccessKeyService struct {
@@ -45,16 +45,16 @@ func (s *S3AccessKeyService) ListForCurrentUser(ctx context.Context) ([]models.S
 	return response.Data, nil
 }
 
-func (s *S3AccessKeyService) ListForUser(ctx context.Context, userId string) ([]models.S3AccessKey, error) {
+func (s *S3AccessKeyService) ListForUser(ctx context.Context, userID string) ([]models.S3AccessKey, error) {
 	var response models.Response[[]models.S3AccessKey]
-	if err := s.client.DoParsed(ctx, "GET", getUsers3AccessKeyEndpoint(userId), nil, &response); err != nil {
+	if err := s.client.DoParsed(ctx, "GET", getUsers3AccessKeyEndpoint(userID), nil, &response); err != nil {
 		return nil, err
 	}
 
 	return response.Data, nil
 }
 
-func (s *S3AccessKeyService) GetByIdForCurrentUser(ctx context.Context, id string) (*models.S3AccessKey, error) {
+func (s *S3AccessKeyService) GetByIDForCurrentUser(ctx context.Context, id string) (*models.S3AccessKey, error) {
 	var response models.Response[*models.S3AccessKey]
 	if err := s.client.DoParsed(ctx, "GET", currentUsers3AccessKeyEndpoint+"/"+id, nil, &response); err != nil {
 		return nil, err
@@ -63,9 +63,9 @@ func (s *S3AccessKeyService) GetByIdForCurrentUser(ctx context.Context, id strin
 	return response.Data, nil
 }
 
-func (s *S3AccessKeyService) GetByIdForUser(ctx context.Context, userId string, id string) (*models.S3AccessKey, error) {
+func (s *S3AccessKeyService) GetByIDForUser(ctx context.Context, userID string, id string) (*models.S3AccessKey, error) {
 	var response models.Response[*models.S3AccessKey]
-	if err := s.client.DoParsed(ctx, "GET", getUsers3AccessKeyEndpoint(userId)+"/"+id, nil, &response); err != nil {
+	if err := s.client.DoParsed(ctx, "GET", getUsers3AccessKeyEndpoint(userID)+"/"+id, nil, &response); err != nil {
 		return nil, err
 	}
 
@@ -81,9 +81,9 @@ func (s *S3AccessKeyService) CreateForCurrentUser(ctx context.Context, s3AccessK
 	return response.Data, nil
 }
 
-func (s *S3AccessKeyService) CreateForUser(ctx context.Context, userId string, s3AccessKey *models.S3AccessKey) (*models.S3AccessKey, error) {
+func (s *S3AccessKeyService) CreateForUser(ctx context.Context, userID string, s3AccessKey *models.S3AccessKey) (*models.S3AccessKey, error) {
 	var response models.Response[*models.S3AccessKey]
-	if err := s.client.DoParsed(ctx, "POST", getUsers3AccessKeyEndpoint(userId), s3AccessKey, &response); err != nil {
+	if err := s.client.DoParsed(ctx, "POST", getUsers3AccessKeyEndpoint(userID), s3AccessKey, &response); err != nil {
 		return nil, err
 	}
 
@@ -94,6 +94,6 @@ func (s *S3AccessKeyService) DeleteForCurrentUser(ctx context.Context, id string
 	return s.client.DoParsed(ctx, "DELETE", currentUsers3AccessKeyEndpoint+"/"+id, nil, nil)
 }
 
-func (s *S3AccessKeyService) DeleteForUser(ctx context.Context, userId string, id string) error {
-	return s.client.DoParsed(ctx, "DELETE", getUsers3AccessKeyEndpoint(userId)+"/"+id, nil, nil)
+func (s *S3AccessKeyService) DeleteForUser(ctx context.Context, userID string, id string) error {
+	return s.client.DoParsed(ctx, "DELETE", getUsers3AccessKeyEndpoint(userID)+"/"+id, nil, nil)
 }

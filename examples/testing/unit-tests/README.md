@@ -48,7 +48,7 @@ The example includes:
 ```go
 mockTenantService := &sgTesting.MockTenantService{}
 mockTenantService.CreateFunc = func(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error) {
-    tenant.Id = "tenant-123"
+    tenant.ID = "tenant-123"
     return tenant, nil
 }
 ```

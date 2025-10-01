@@ -12,9 +12,9 @@ type User struct {
 	// if true, the local User cannot sign in (does not apply to federated Users)
 	Disable *bool `json:"disable,omitempty"`
 	// Storage Tenant Account ID, or zero for Grid Administrators
-	AccountId *string `json:"accountId,omitempty"`
+	AccountID *string `json:"accountId,omitempty"`
 	// UUID for the User (generated automatically)
-	Id *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// true if the User is federated, for example, an LDAP User
 	Federated *bool `json:"federated,omitempty"`
 	// contains the User uniqueName and Account ID (generated automatically)

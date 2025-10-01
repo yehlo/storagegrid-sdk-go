@@ -126,7 +126,7 @@ opts := []client.ClientOption{
 	client.WithCredentials(&models.Credentials{
 		Username: "your-username",
 		Password: "your-password",
-		// AccountId: &accountID, // Required for tenant operations only
+		// AccountID: &accountID, // Required for tenant operations only
 	}),
 	// client.WithSkipSSL(), // Skip SSL verification (development only)
 }
@@ -145,7 +145,7 @@ gridClient, err := client.NewGridClient(
 	client.WithCredentials(&models.Credentials{
 		Username: "grid-admin",
 		Password: "admin-password",
-		// No AccountId needed for grid operations
+		// No AccountID needed for grid operations
 	}),
 )
 if err != nil {
@@ -180,7 +180,7 @@ if err != nil {
 	return fmt.Errorf("failed to create tenant: %w", err)
 }
 
-fmt.Printf("Created tenant: %s (ID: %s)\n", *createdTenant.Name, createdTenant.Id)
+fmt.Printf("Created tenant: %s (ID: %s)\n", *createdTenant.Name, createdTenant.ID)
 ```
 
 #### Monitoring Grid Health
@@ -215,7 +215,7 @@ tenantClient, err := client.NewTenantClient(
 	client.WithCredentials(&models.Credentials{
 		Username:  "tenant-admin",
 		Password:  "tenant-password",
-		AccountId: &accountID, // Required for tenant operations
+		AccountID: &accountID, // Required for tenant operations
 	}),
 )
 if err != nil {
@@ -273,7 +273,7 @@ accessKey := &models.S3AccessKey{
 	Expires: nil, // No expiration
 }
 
-keys, err := tenantClient.S3AccessKeys().CreateForUser(ctx, *createdUser.Id, accessKey)
+keys, err := tenantClient.S3AccessKeys().CreateForUser(ctx, *createdUser.ID, accessKey)
 if err != nil {
 	return fmt.Errorf("failed to create access keys: %w", err)
 }
@@ -350,13 +350,13 @@ func TestTenantOperations(t *testing.T) {
 		ListFunc: func(ctx context.Context) (*[]models.Tenant, error) {
 			return &[]models.Tenant{
 				{
-					Id:   "tenant-123",
+					ID:   "tenant-123",
 					Name: "Test Tenant",
 				},
 			}, nil
 		},
 		CreateFunc: func(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error) {
-			tenant.Id = "new-tenant-456"
+			tenant.ID = "new-tenant-456"
 			return tenant, nil
 		},
 	}
@@ -371,8 +371,8 @@ func TestTenantOperations(t *testing.T) {
 		t.Fatalf("Expected 1 tenant, got %d", len(*tenants))
 	}
 
-	if (*tenants)[0].Id != "tenant-123" {
-		t.Fatalf("Expected tenant ID 'tenant-123', got %s", (*tenants)[0].Id)
+	if (*tenants)[0].ID != "tenant-123" {
+		t.Fatalf("Expected tenant ID 'tenant-123', got %s", (*tenants)[0].ID)
 	}
 }
 ```

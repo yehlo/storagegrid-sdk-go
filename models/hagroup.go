@@ -2,7 +2,7 @@ package models
 
 type HAGroup struct {
 	// ID is the unique identifier of the HA group.
-	Id string `json:"id,omitempty"`
+	ID string `json:"id,omitempty"`
 	// Name is the name of the HA group.
 	Name *string `json:"name,omitempty"`
 	// Description is the description of the HA group.

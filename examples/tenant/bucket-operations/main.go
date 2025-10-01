@@ -31,7 +31,7 @@ func main() {
 		client.WithCredentials(&models.Credentials{
 			Username:  username,
 			Password:  password,
-			AccountId: &accountID,
+			AccountID: &accountID,
 		}),
 	}
 

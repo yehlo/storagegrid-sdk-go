@@ -11,7 +11,7 @@ const (
 	trafficClassEndpoint = "/grid/traffic-classes/policies"
 )
 
-// TenantServiceInterface defines the contract for tenant service operations
+// TrafficClassServiceInterface defines the contract for tenant service operations
 type TrafficClassServiceInterface interface {
 	// Create(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error)
 	// Delete(ctx context.Context, id string) error

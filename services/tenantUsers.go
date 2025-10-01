@@ -14,7 +14,7 @@ const (
 // TenantUserServiceInterface defines the contract for tenant user service operations
 type TenantUserServiceInterface interface {
 	List(ctx context.Context) ([]models.User, error)
-	GetById(ctx context.Context, id string) (*models.User, error)
+	GetByID(ctx context.Context, id string) (*models.User, error)
 	GetByName(ctx context.Context, name string) (*models.User, error)
 	Create(ctx context.Context, user *models.User) (*models.User, error)
 	Update(ctx context.Context, user *models.User) (*models.User, error)
@@ -39,7 +39,7 @@ func (s *TenantUserService) List(ctx context.Context) ([]models.User, error) {
 	return response.Data, nil
 }
 
-func (s *TenantUserService) GetById(ctx context.Context, id string) (*models.User, error) {
+func (s *TenantUserService) GetByID(ctx context.Context, id string) (*models.User, error) {
 	var response models.Response[*models.User]
 	if err := s.client.DoParsed(ctx, "GET", tenantUserEndpoint+"/"+id, nil, &response); err != nil {
 		return nil, err
@@ -73,7 +73,7 @@ func (s *TenantUserService) Create(ctx context.Context, user *models.User) (*mod
 
 func (s *TenantUserService) Update(ctx context.Context, user *models.User) (*models.User, error) {
 	var response models.Response[*models.User]
-	if err := s.client.DoParsed(ctx, "PUT", tenantUserEndpoint+"/"+*user.Id, user, &response); err != nil {
+	if err := s.client.DoParsed(ctx, "PUT", tenantUserEndpoint+"/"+*user.ID, user, &response); err != nil {
 		return nil, err
 	}
 
