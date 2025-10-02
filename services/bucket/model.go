@@ -1,4 +1,4 @@
-package models
+package bucket
 
 import "time"
 
@@ -8,25 +8,25 @@ type Bucket struct {
 	// Bucket name. Must be unique across the grid and DNS compliant. See the instructions for using S3 for details.
 	Name string `json:"name"`
 	// the region for this bucket, which must already be defined (defaults to us-east-1 if not specified)
-	Region       string                      `json:"region,omitempty"`
-	S3ObjectLock *BucketS3ObjectLockSettings `json:"s3ObjectLock,omitempty"`
+	Region       string                `json:"region,omitempty"`
+	S3ObjectLock *S3ObjectLockSettings `json:"s3ObjectLock,omitempty"`
 	// the creation time of the bucket
 	CreationTime time.Time `json:"creationTime,omitempty"`
 	// compliance settings for the bucket
-	Compliance *BucketComplianceSettings `json:"compliance,omitempty"`
+	Compliance *ComplianceSettings `json:"compliance,omitempty"`
 	// status of the object deletion
-	DeleteObjectStatus *BucketDeleteObjectStatus `json:"deleteObjectStatus,omitempty"`
+	DeleteObjectStatus *DeleteObjectStatus `json:"deleteObjectStatus,omitempty"`
 }
 
-// BucketS3ObjectLockSettings Settings for S3 Object Lock. Cannot be used with legacy Compliance.
-type BucketS3ObjectLockSettings struct {
+// S3ObjectLockSettings Settings for S3 Object Lock. Cannot be used with legacy Compliance.
+type S3ObjectLockSettings struct {
 	// whether the bucket has S3 Object Lock enabled
-	Enabled                 *bool                                       `json:"enabled"`
-	DefaultRetentionSetting *BucketS3ObjectLockDefaultRetentionSettings `json:"defaultRetentionSetting,omitempty"`
+	Enabled                 *bool                                 `json:"enabled"`
+	DefaultRetentionSetting *S3ObjectLockDefaultRetentionSettings `json:"defaultRetentionSetting,omitempty"`
 }
 
-// BucketS3ObjectLockDefaultRetentionSettings Default retention settings for S3 Object Lock.
-type BucketS3ObjectLockDefaultRetentionSettings struct {
+// S3ObjectLockDefaultRetentionSettings Default retention settings for S3 Object Lock.
+type S3ObjectLockDefaultRetentionSettings struct {
 	// The retention mode used for new objects added to this bucket. Must be compliance, which means that an object version cannot be overwritten or deleted by any user.
 	Mode string `json:"mode"`
 	// The length of the default retention period for new objects added to this bucket, in days. If provided, must be paired with retentionMode. Does not affect existing bucket objects or objects with their own retain-until-date settings.
@@ -35,7 +35,7 @@ type BucketS3ObjectLockDefaultRetentionSettings struct {
 	Years int32 `json:"years,omitempty"`
 }
 
-type BucketComplianceSettings struct {
+type ComplianceSettings struct {
 	// Wether the objects are autoDeleted
 	AutoDelete *bool `json:"autoDelete"`
 	// time to legally hold the objects
@@ -44,7 +44,7 @@ type BucketComplianceSettings struct {
 	RetentionPeriodMinutes *int32 `json:"retentionPeriodMinutes,omitempty"`
 }
 
-type BucketDeleteObjectStatus struct {
+type DeleteObjectStatus struct {
 	// are the objects being deleted
 	IsDeletingObjects *bool `json:"isDeletingObjects"`
 	// initial Object count before operation

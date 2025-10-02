@@ -1,8 +1,8 @@
-package models
+package gateway
 
-type GatewayConfig struct {
+type Config struct {
 	// ID is the unique identifier of the load balancer endpoint.
-	Id string `json:"id,omitempty"`
+	ID string `json:"id,omitempty"`
 	// Name is the name of the load balancer endpoint.
 	DisplayName *string `json:"displayName,omitempty"`
 	// Port made availablee by the ndpoint
@@ -18,9 +18,9 @@ type GatewayConfig struct {
 }
 
 type PinTargets struct {
-	HaGroups       *[]string         `json:"haGroups,omitempty"`
-	NodeInterfaces *[]NodeInterfaces `json:"nodeInterfaces,omitempty"`
-	NodeTypes      *[]string         `json:"nodeTypes,omitempty"`
+	HaGroups       []string         `json:"haGroups,omitempty"`
+	NodeInterfaces []NodeInterfaces `json:"nodeInterfaces,omitempty"`
+	NodeTypes      []string         `json:"nodeTypes,omitempty"`
 }
 
 type NodeInterfaces struct {
@@ -33,10 +33,10 @@ type ManagementInterfaces struct {
 	EnableTenantManager *bool `json:"enableTenantManager,omitempty"`
 }
 
-type GWServerConfig struct {
+type ServerConfig struct {
 	DefaultServiceType     *string            `json:"defaultServiceType,omitempty"`
 	AccountRestrictionMode *string            `json:"accountRestrictionMode,omitempty"`
-	AccountRestrictions    *[]string          `json:"accountRestrictions,omitempty"`
+	AccountRestrictions    []string           `json:"accountRestrictions,omitempty"`
 	CertSource             *string            `json:"certSource,omitempty"`
 	PlaintextCertData      *PlaintextCertData `json:"plaintextCertData,omitempty"`
 }
@@ -49,7 +49,7 @@ type PlaintextCertData struct {
 
 type Metadata struct {
 	ServerCertificateDetails *ServerCertificateDetails `json:"serverCertificateDetails,omitempty"`
-	CaBundleDetails          *[]CaBundleDetails        `json:"caBundleDetails,omitempty"`
+	CaBundleDetails          []CaBundleDetails         `json:"caBundleDetails,omitempty"`
 }
 
 type ServerCertificateDetails struct {
@@ -60,7 +60,7 @@ type ServerCertificateDetails struct {
 	NotBefore       *string       `json:"notBefore,omitempty"`
 	NotAfter        *string       `json:"notAfter,omitempty"`
 	FingerPrints    *FingerPrints `json:"fingerPrints,omitempty"`
-	SubjectAltNames *[]string     `json:"subjectAltNames,omitempty"`
+	SubjectAltNames []string      `json:"subjectAltNames,omitempty"`
 	KeyUsage        *string       `json:"keyUsage,omitempty"`
 }
 

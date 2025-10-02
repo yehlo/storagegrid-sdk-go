@@ -1,13 +1,13 @@
-package models
+package accesskeys
 
 import "time"
 
-// S3AccessKey S3 credential pair and associated user/account information
-type S3AccessKey struct {
+// AccessKey S3 credential pair and associated user/account information
+type AccessKey struct {
 	// A unique identifier for the S3 credential pair (automatically assigned when an access key is created)
-	Id *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// Storage Tenant Account ID
-	AccountId *string `json:"accountId,omitempty"`
+	AccountID *string `json:"accountId,omitempty"`
 	// Obfuscated access key
 	DisplayName *string `json:"displayName,omitempty"`
 	// Contains the user name and account ID (generated automatically)

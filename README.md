@@ -4,7 +4,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/yehlo/storagegrid-sdk-go)](https://goreportcard.com/report/github.com/yehlo/storagegrid-sdk-go)
 
 > **⚠️ Community-Maintained SDK**
-> 
+>
 > This SDK was created by the community due to the lack of an official NetApp StorageGRID SDK for Go. It is designed to fulfill the needs of its maintainers and contributors. If you find something missing or spot a bug, please open an [issue](https://github.com/yehlo/storagegrid-sdk-go/issues) or submit a [pull request](https://github.com/yehlo/storagegrid-sdk-go/pulls)! Contributions are highly encouraged.
 
 ## Table of Contents
@@ -126,7 +126,7 @@ opts := []client.ClientOption{
 	client.WithCredentials(&models.Credentials{
 		Username: "your-username",
 		Password: "your-password",
-		// AccountId: &accountID, // Required for tenant operations only
+		// AccountID: &accountID, // Required for tenant operations only
 	}),
 	// client.WithSkipSSL(), // Skip SSL verification (development only)
 }
@@ -145,7 +145,7 @@ gridClient, err := client.NewGridClient(
 	client.WithCredentials(&models.Credentials{
 		Username: "grid-admin",
 		Password: "admin-password",
-		// No AccountId needed for grid operations
+		// No AccountID needed for grid operations
 	}),
 )
 if err != nil {
@@ -164,11 +164,11 @@ if err != nil {
 }
 
 // Create a new tenant
-tenant := &models.Tenant{
+tenant := &tenant.Tenant{
 	Name:         "my-tenant",
 	Description:  "Some description",
 	Capabilities: []string{"management", "s3"},
-	Policy: &models.TenantPolicy{
+	Policy: &tenant.TenantPolicy{
 		UseAccountIdentitySource: false,
 		AllowPlatformServices:    true,
 		QuotaObjectBytes:         100 * 1024 * 1024 * 1024, // 100GB
@@ -180,7 +180,7 @@ if err != nil {
 	return fmt.Errorf("failed to create tenant: %w", err)
 }
 
-fmt.Printf("Created tenant: %s (ID: %s)\n", *createdTenant.Name, createdTenant.Id)
+fmt.Printf("Created tenant: %s (ID: %s)\n", *createdTenant.Name, createdTenant.ID)
 ```
 
 #### Monitoring Grid Health
@@ -195,8 +195,8 @@ if err != nil {
 if health.AllGreen() {
 	log.Println("✅ Grid is healthy")
 } else {
-	log.Printf("⚠️  Grid has issues - Connected nodes: %d, Alerts: %d", 
-		*health.Nodes.Connected, 
+	log.Printf("⚠️  Grid has issues - Connected nodes: %d, Alerts: %d",
+		*health.Nodes.Connected,
 		*health.Alerts.Critical + *health.Alerts.Major)
 }
 ```
@@ -215,7 +215,7 @@ tenantClient, err := client.NewTenantClient(
 	client.WithCredentials(&models.Credentials{
 		Username:  "tenant-admin",
 		Password:  "tenant-password",
-		AccountId: &accountID, // Required for tenant operations
+		AccountID: &accountID, // Required for tenant operations
 	}),
 )
 if err != nil {
@@ -228,11 +228,11 @@ if err != nil {
 
 ```go
 // Create a bucket with versioning enabled
-bucket := &models.Bucket{
+bucket := &bucket.Bucket{
 	Name:             "my-application-data",
 	Region:           "us-east-1",
 	EnableVersioning: true,
-	S3ObjectLock: &models.BucketS3ObjectLockSettings{
+	S3ObjectLock: &bucket.S3ObjectLockSettings{
 		Enabled: false,
 	},
 }
@@ -257,7 +257,7 @@ for _, bucket := range *buckets {
 
 ```go
 // Create a new user
-user := &models.User{
+user := &tenantuser.User{
 	UniqueName:  "application-user", // Will be prefixed with "user/"
 	DisplayName: "Application Service User",
 	Disable:     false,
@@ -269,11 +269,11 @@ if err != nil {
 }
 
 // Generate S3 access keys for the user
-accessKey := &models.S3AccessKey{
+accessKey := &accesskeys.S3AccessKey{
 	Expires: nil, // No expiration
 }
 
-keys, err := tenantClient.S3AccessKeys().CreateForUser(ctx, *createdUser.Id, accessKey)
+keys, err := tenantClient.S3AccessKeys().CreateForUser(ctx, *createdUser.ID, accessKey)
 if err != nil {
 	return fmt.Errorf("failed to create access keys: %w", err)
 }
@@ -305,7 +305,7 @@ fmt.Printf("Grid Status: All Green = %v\n", health.AllGreen())
 
 #### Create Tenant
 ```go
-tenant := &models.Tenant{
+tenant := &tenant.Tenant{
     Name:         "my-tenant",
     Capabilities: []string{"s3", "management"},
 }
@@ -314,7 +314,7 @@ createdTenant, err := gridClient.Tenant().Create(ctx, tenant)
 
 #### Create Bucket
 ```go
-bucket := &models.Bucket{
+bucket := &bucket.Bucket{
     Name:   "my-bucket",
     Region: "us-east-1",
 }
@@ -347,16 +347,16 @@ func TestTenantOperations(t *testing.T) {
 
 	// Create mock tenant service
 	mockService := &testing.MockTenantService{
-		ListFunc: func(ctx context.Context) (*[]models.Tenant, error) {
-			return &[]models.Tenant{
+		ListFunc: func(ctx context.Context) ([]tenant.Tenant, error) {
+			return &[]tenant.Tenant{
 				{
-					Id:   "tenant-123",
+					ID:   "tenant-123",
 					Name: "Test Tenant",
 				},
 			}, nil
 		},
-		CreateFunc: func(ctx context.Context, tenant *models.Tenant) (*models.Tenant, error) {
-			tenant.Id = "new-tenant-456"
+		CreateFunc: func(ctx context.Context, tenant *tenant.Tenant) (*tenant.Tenant, error) {
+			tenant.ID = "new-tenant-456"
 			return tenant, nil
 		},
 	}
@@ -371,8 +371,8 @@ func TestTenantOperations(t *testing.T) {
 		t.Fatalf("Expected 1 tenant, got %d", len(*tenants))
 	}
 
-	if (*tenants)[0].Id != "tenant-123" {
-		t.Fatalf("Expected tenant ID 'tenant-123', got %s", (*tenants)[0].Id)
+	if (*tenants)[0].ID != "tenant-123" {
+		t.Fatalf("Expected tenant ID 'tenant-123', got %s", (*tenants)[0].ID)
 	}
 }
 ```
@@ -396,7 +396,7 @@ func TestIntegration(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	
+
 	client, err := client.NewGridClient(
 		client.WithEndpoint(endpoint),
 		client.WithCredentials(&models.Credentials{
@@ -423,7 +423,7 @@ func TestIntegration(t *testing.T) {
 The `testing` package provides mocks for all service interfaces:
 
 - `MockTenantService` - Grid tenant management
-- `MockBucketService` - Bucket operations  
+- `MockBucketService` - Bucket operations
 - `MockTenantUserService` - Tenant user management
 - `MockTenantGroupService` - Tenant group management
 - `MockS3AccessKeyService` - S3 access key management

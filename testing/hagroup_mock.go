@@ -3,42 +3,41 @@ package testing
 import (
 	"context"
 
-	"github.com/yehlo/storagegrid-sdk-go/models"
-	"github.com/yehlo/storagegrid-sdk-go/services"
+	"github.com/yehlo/storagegrid-sdk-go/services/hagroup"
 )
 
-// MockHAGroupService implements services.HAGroupServiceInterface for testing
+// MockHAGroupService implements hagroup.ServiceInterface for testing
 type MockHAGroupService struct {
-	ListFunc    func(ctx context.Context) (*[]models.HAGroup, error)
-	GetByIdFunc func(ctx context.Context, id string) (*models.HAGroup, error)
-	CreateFunc  func(ctx context.Context, hagroup *models.HAGroup) (*models.HAGroup, error)
-	UpdateFunc  func(ctx context.Context, hagroup *models.HAGroup) (*models.HAGroup, error)
+	ListFunc    func(ctx context.Context) ([]hagroup.HAGroup, error)
+	GetByIDFunc func(ctx context.Context, id string) (*hagroup.HAGroup, error)
+	CreateFunc  func(ctx context.Context, hagroup *hagroup.HAGroup) (*hagroup.HAGroup, error)
+	UpdateFunc  func(ctx context.Context, hagroup *hagroup.HAGroup) (*hagroup.HAGroup, error)
 	DeleteFunc  func(ctx context.Context, id string) error
 }
 
-func (m *MockHAGroupService) List(ctx context.Context) (*[]models.HAGroup, error) {
+func (m *MockHAGroupService) List(ctx context.Context) ([]hagroup.HAGroup, error) {
 	if m.ListFunc != nil {
 		return m.ListFunc(ctx)
 	}
-	return &[]models.HAGroup{}, nil
+	return []hagroup.HAGroup{}, nil
 }
 
-func (m *MockHAGroupService) GetById(ctx context.Context, id string) (*models.HAGroup, error) {
-	if m.GetByIdFunc != nil {
-		return m.GetByIdFunc(ctx, id)
+func (m *MockHAGroupService) GetByID(ctx context.Context, id string) (*hagroup.HAGroup, error) {
+	if m.GetByIDFunc != nil {
+		return m.GetByIDFunc(ctx, id)
 	}
-	return &models.HAGroup{Id: id}, nil
+	return &hagroup.HAGroup{ID: id}, nil
 }
 
-func (m *MockHAGroupService) Create(ctx context.Context, hagroup *models.HAGroup) (*models.HAGroup, error) {
+func (m *MockHAGroupService) Create(ctx context.Context, hagroup *hagroup.HAGroup) (*hagroup.HAGroup, error) {
 	if m.CreateFunc != nil {
 		return m.CreateFunc(ctx, hagroup)
 	}
-	hagroup.Id = "mock-hagroup-id"
+	hagroup.ID = "mock-hagroup-id"
 	return hagroup, nil
 }
 
-func (m *MockHAGroupService) Update(ctx context.Context, hagroup *models.HAGroup) (*models.HAGroup, error) {
+func (m *MockHAGroupService) Update(ctx context.Context, hagroup *hagroup.HAGroup) (*hagroup.HAGroup, error) {
 	if m.UpdateFunc != nil {
 		return m.UpdateFunc(ctx, hagroup)
 	}
@@ -53,4 +52,4 @@ func (m *MockHAGroupService) Delete(ctx context.Context, id string) error {
 }
 
 // Compile-time interface compliance check
-var _ services.HAGroupServiceInterface = (*MockHAGroupService)(nil)
+var _ hagroup.ServiceInterface = (*MockHAGroupService)(nil)

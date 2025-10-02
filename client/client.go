@@ -1,3 +1,4 @@
+// Package client contains all logic for the storagegrid client
 package client
 
 import (
@@ -22,6 +23,7 @@ var (
 	implementedAuthorizeEndpoints = []string{"/authorize"}
 )
 
+// Client is the base struct used to interface with the storagegrid API
 type Client struct {
 	baseURL      *url.URL
 	httpClient   *http.Client
@@ -32,21 +34,25 @@ type Client struct {
 	mu           sync.Mutex
 }
 
-type ClientOption func(*Client)
+// Option is used to provide options for the client
+type Option func(*Client)
 
-func WithCredentials(creds *models.Credentials) ClientOption {
+// WithCredentials allows specification of credentials
+func WithCredentials(creds *models.Credentials) Option {
 	return func(c *Client) {
 		c.credentials = creds
 	}
 }
 
-func WithSkipSSL() ClientOption {
+// WithSkipSSL allows to skip SSL verification on clients that use self signed certificates
+func WithSkipSSL() Option {
 	return func(c *Client) {
 		c.skipSSL = true
 	}
 }
 
-func WithEndpoint(endpoint string) ClientOption {
+// WithEndpoint is a client option for specifying the endpoint of a client
+func WithEndpoint(endpoint string) Option {
 	return func(c *Client) {
 		// Required because url.Parse returns an empty string for the hostname if there was no schema
 		if !strings.HasPrefix(endpoint, "https://") && !strings.HasPrefix(endpoint, "http://") {
@@ -61,7 +67,7 @@ func WithEndpoint(endpoint string) ClientOption {
 	}
 }
 
-func newClient(options ...ClientOption) (*Client, error) {
+func newClient(options ...Option) (*Client, error) {
 	c := &Client{
 		httpClient: http.DefaultClient,
 	}
@@ -114,7 +120,7 @@ func (c *Client) authorize(ctx context.Context) error {
 	return nil
 }
 
-func (c *Client) newRequest(ctx context.Context, method string, path string, body interface{}) (*http.Response, error) {
+func (c *Client) newRequest(ctx context.Context, method string, path string, body any) (*http.Response, error) {
 	var err error
 	var reqBody []byte
 	if body != nil {
@@ -156,7 +162,7 @@ func (c *Client) newRequest(ctx context.Context, method string, path string, bod
 	return resp, nil
 }
 
-func (c *Client) parseResponse(resp *http.Response, resourceType interface{}) error {
+func (c *Client) parseResponse(resp *http.Response, resourceType any) error {
 	defer resp.Body.Close()
 
 	respBody, err := io.ReadAll(resp.Body)
@@ -172,7 +178,8 @@ func (c *Client) parseResponse(resp *http.Response, resourceType interface{}) er
 	return nil
 }
 
-func (c *Client) DoUnparsed(ctx context.Context, method string, path string, body interface{}) (*http.Response, error) {
+// DoUnparsed can be used to call the API, returning the http.Response
+func (c *Client) DoUnparsed(ctx context.Context, method string, path string, body any) (*http.Response, error) {
 	resp, err := c.newRequest(ctx, method, path, body)
 	if err != nil {
 		return nil, err
@@ -185,7 +192,8 @@ func (c *Client) DoUnparsed(ctx context.Context, method string, path string, bod
 	return resp, nil
 }
 
-func (c *Client) DoParsed(ctx context.Context, method string, path string, body interface{}, output interface{}) error {
+// DoParsed can be used to call the API and parse the response to output
+func (c *Client) DoParsed(ctx context.Context, method string, path string, body any, output any) error {
 	resp, err := c.DoUnparsed(ctx, method, path, body)
 	if err != nil {
 		return err

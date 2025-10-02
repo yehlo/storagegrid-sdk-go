@@ -1,4 +1,4 @@
-package models
+package tenantgroup
 
 type TenantGroup struct {
 	// the machine-readable name for the Group (unique within an Account; must begin with group/ or federated-group/)
@@ -6,28 +6,28 @@ type TenantGroup struct {
 	// the human-readable name for the Group (required for local Groups and imported automatically for federated Groups)
 	DisplayName string `json:"displayName,omitempty"`
 	// Whether the group is read-only. Users can view settings and features but cannot make changes or perform operations. Local users can change their passwords.
-	ManagementReadOnly *bool                `json:"managementReadOnly,omitempty"`
-	Policies           *TenantGroupPolicies `json:"policies,omitempty"`
+	ManagementReadOnly *bool     `json:"managementReadOnly,omitempty"`
+	Policies           *Policies `json:"policies,omitempty"`
 	// Storage Tenant Account ID, or zero for Grid Administrators
-	AccountId *string `json:"accountId,omitempty"`
+	AccountID *string `json:"accountId,omitempty"`
 	// UUID for the Group (generated automatically)
-	Id *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// true if the Group is federated, for example, an LDAP Group
 	Federated *bool `json:"federated,omitempty"`
 	// contains the Group uniqueName and Account ID (generated automatically)
 	GroupURN *string `json:"groupURN,omitempty"`
 }
 
-type TenantGroupPolicies struct {
+type Policies struct {
 	// Management-level permissions for the group.
-	Management *TenantGroupManagementPolicy `json:"management,omitempty"`
+	Management *ManagementPolicy `json:"management,omitempty"`
 	// S3-specific permissions and policies.
 	S3 *S3Policy `json:"s3,omitempty"`
 	// Swift-specific roles for the group.
 	Swift *SwiftPolicy `json:"swift,omitempty"`
 }
 
-type TenantGroupManagementPolicy struct {
+type ManagementPolicy struct {
 	// Permission to manage all containers.
 	ManageAllContainers *bool `json:"manageAllContainers,omitempty"`
 	// Permission to manage endpoints.
@@ -59,9 +59,9 @@ type S3Statement struct {
 	// The effect of the statement (e.g., "Allow" or "Deny").
 	Effect string `json:"Effect,omitempty"`
 	// Actions allowed by this statement.
-	Action *[]string `json:"Action,omitempty"`
+	Action []string `json:"Action,omitempty"`
 	// Actions explicitly denied by this statement.
-	NotAction *[]string `json:"NotAction,omitempty"`
+	NotAction []string `json:"NotAction,omitempty"`
 	// Resources this statement applies to.
 	Resource []string `json:"Resource,omitempty"`
 	// Resources explicitly excluded.

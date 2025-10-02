@@ -10,6 +10,7 @@ import (
 
 	"github.com/yehlo/storagegrid-sdk-go/client"
 	"github.com/yehlo/storagegrid-sdk-go/models"
+	"github.com/yehlo/storagegrid-sdk-go/services/tenant"
 )
 
 func main() {
@@ -26,7 +27,7 @@ func main() {
 	ctx := context.Background()
 
 	// Configure client options
-	opts := []client.ClientOption{
+	opts := []client.Option{
 		client.WithEndpoint(endpoint),
 		client.WithCredentials(&models.Credentials{
 			Username: username,
@@ -71,16 +72,16 @@ func listTenants(ctx context.Context, client *client.GridClient) error {
 		return fmt.Errorf("failed to list tenants: %w", err)
 	}
 
-	if len(*tenants) == 0 {
+	if len(tenants) == 0 {
 		fmt.Println("  No tenants found")
 		return nil
 	}
 
-	fmt.Printf("  Found %d tenant(s):\n", len(*tenants))
-	for _, tenant := range *tenants {
+	fmt.Printf("  Found %d tenant(s):\n", len(tenants))
+	for _, tenant := range tenants {
 		fmt.Printf("    • %s (ID: %s)\n",
 			stringValue(tenant.Name),
-			tenant.Id)
+			tenant.ID)
 
 		if tenant.Policy != nil && tenant.Policy.QuotaObjectBytes != nil {
 			quota := *tenant.Policy.QuotaObjectBytes
@@ -104,7 +105,7 @@ func createExampleTenant(ctx context.Context, client *client.GridClient) error {
 		return fmt.Errorf("failed to check existing tenants: %w", err)
 	}
 
-	for _, tenant := range *tenants {
+	for _, tenant := range tenants {
 		if stringValue(tenant.Name) == "example-tenant" {
 			fmt.Println("  Example tenant already exists, skipping creation")
 			return nil
@@ -112,11 +113,11 @@ func createExampleTenant(ctx context.Context, client *client.GridClient) error {
 	}
 
 	// Create new tenant
-	newTenant := &models.Tenant{
+	newTenant := &tenant.Tenant{
 		Name:         stringPtr("example-tenant"),
 		Description:  stringPtr("Example tenant created by SDK"),
 		Capabilities: []string{"management", "s3"},
-		Policy: &models.TenantPolicy{
+		Policy: &tenant.TenantPolicy{
 			UseAccountIdentitySource: false,
 			AllowPlatformServices:    true,
 			AllowSelectObjectContent: boolPtr(true),
@@ -130,7 +131,7 @@ func createExampleTenant(ctx context.Context, client *client.GridClient) error {
 	}
 
 	fmt.Printf("  ✅ Created tenant: %s\n", stringValue(createdTenant.Name))
-	fmt.Printf("     Account ID: %s\n", createdTenant.Id)
+	fmt.Printf("     Account ID: %s\n", createdTenant.ID)
 	fmt.Printf("     Capabilities: %s\n", strings.Join(createdTenant.Capabilities, ", "))
 
 	if createdTenant.Policy != nil && createdTenant.Policy.QuotaObjectBytes != nil {
@@ -149,15 +150,15 @@ func monitorTenantUsage(ctx context.Context, client *client.GridClient) error {
 		return fmt.Errorf("failed to list tenants: %w", err)
 	}
 
-	if len(*tenants) == 0 {
+	if len(tenants) == 0 {
 		fmt.Println("  No tenants to monitor")
 		return nil
 	}
 
-	for _, tenant := range *tenants {
+	for _, tenant := range tenants {
 		fmt.Printf("\n  📈 Usage for %s:\n", stringValue(tenant.Name))
 
-		usage, err := client.Tenant().GetUsage(ctx, tenant.Id)
+		usage, err := client.Tenant().GetUsage(ctx, tenant.ID)
 		if err != nil {
 			fmt.Printf("    ❌ Failed to get usage: %v\n", err)
 			continue

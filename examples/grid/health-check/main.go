@@ -1,3 +1,4 @@
+// this package is used as an example for healthchecks in storagegrid
 package main
 
 import (
@@ -8,6 +9,7 @@ import (
 
 	"github.com/yehlo/storagegrid-sdk-go/client"
 	"github.com/yehlo/storagegrid-sdk-go/models"
+	"github.com/yehlo/storagegrid-sdk-go/services/health"
 )
 
 func main() {
@@ -24,7 +26,7 @@ func main() {
 	ctx := context.Background()
 
 	// Configure client options
-	opts := []client.ClientOption{
+	opts := []client.Option{
 		client.WithEndpoint(endpoint),
 		client.WithCredentials(&models.Credentials{
 			Username: username,
@@ -112,12 +114,11 @@ func main() {
 	}
 }
 
-func getHealthStatus(health *models.Health) string {
+func getHealthStatus(health *health.Health) string {
 	if health.AllGreen() {
 		return "✅ Healthy"
 	} else if health.Operative() {
 		return "⚠️  Operational with Issues"
-	} else {
-		return "🚨 Critical Issues"
 	}
+	return "🚨 Critical Issues"
 }

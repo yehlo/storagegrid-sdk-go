@@ -10,6 +10,8 @@ import (
 
 	"github.com/yehlo/storagegrid-sdk-go/client"
 	"github.com/yehlo/storagegrid-sdk-go/models"
+	"github.com/yehlo/storagegrid-sdk-go/services/bucket"
+	"github.com/yehlo/storagegrid-sdk-go/services/tenant"
 )
 
 // Integration tests that require a real StorageGRID environment
@@ -78,7 +80,7 @@ func setupTenantClient(t *testing.T, tenantID string) *client.TenantClient {
 	credentials := &models.Credentials{
 		Username:  username,
 		Password:  password,
-		AccountId: &tenantID,
+		AccountID: &tenantID,
 	}
 
 	tenantClient, err := client.NewTenantClient(
@@ -130,7 +132,7 @@ func TestGridClient_TenantManagement(t *testing.T) {
 	tenantName := fmt.Sprintf("test-tenant-%d", time.Now().Unix())
 
 	// Create tenant
-	tenant := &models.Tenant{
+	tenant := &tenant.Tenant{
 		Name:         &tenantName,
 		Capabilities: []string{"s3", "management"},
 	}
@@ -141,22 +143,22 @@ func TestGridClient_TenantManagement(t *testing.T) {
 		t.Fatalf("Failed to create tenant: %v", err)
 	}
 
-	if createdTenant.Id == "" {
+	if createdTenant.ID == "" {
 		t.Fatal("Created tenant has no ID")
 	}
 
-	t.Logf("Created tenant with ID: %s", createdTenant.Id)
+	t.Logf("Created tenant with ID: %s", createdTenant.ID)
 
 	// Cleanup: Delete the tenant
 	t.Cleanup(func() {
 		cleanupCtx, cleanupCancel := context.WithTimeout(context.Background(), 30*time.Second)
 		defer cleanupCancel()
 
-		err := gridClient.Tenant().Delete(cleanupCtx, createdTenant.Id)
+		err := gridClient.Tenant().Delete(cleanupCtx, createdTenant.ID)
 		if err != nil {
-			t.Logf("Warning: Failed to cleanup tenant %s: %v", createdTenant.Id, err)
+			t.Logf("Warning: Failed to cleanup tenant %s: %v", createdTenant.ID, err)
 		} else {
-			t.Logf("Successfully cleaned up tenant %s", createdTenant.Id)
+			t.Logf("Successfully cleaned up tenant %s", createdTenant.ID)
 		}
 	})
 
@@ -167,8 +169,8 @@ func TestGridClient_TenantManagement(t *testing.T) {
 	}
 
 	found := false
-	for _, tenant := range *tenants {
-		if tenant.Id == createdTenant.Id {
+	for _, tenant := range tenants {
+		if tenant.ID == createdTenant.ID {
 			found = true
 			break
 		}
@@ -179,13 +181,13 @@ func TestGridClient_TenantManagement(t *testing.T) {
 	}
 
 	// Get tenant by ID
-	retrievedTenant, err := gridClient.Tenant().GetById(ctx, createdTenant.Id)
+	retrievedTenant, err := gridClient.Tenant().GetByID(ctx, createdTenant.ID)
 	if err != nil {
 		t.Fatalf("Failed to get tenant by ID: %v", err)
 	}
 
-	if retrievedTenant.Id != createdTenant.Id {
-		t.Fatalf("Retrieved tenant ID mismatch: expected %s, got %s", createdTenant.Id, retrievedTenant.Id)
+	if retrievedTenant.ID != createdTenant.ID {
+		t.Fatalf("Retrieved tenant ID mismatch: expected %s, got %s", createdTenant.ID, retrievedTenant.ID)
 	}
 
 	if retrievedTenant.Name == nil || *retrievedTenant.Name != tenantName {
@@ -213,7 +215,7 @@ func TestTenantClient_BucketOperations(t *testing.T) {
 	bucketName := fmt.Sprintf("test-bucket-%d", time.Now().Unix())
 
 	// Create bucket
-	bucket := &models.Bucket{
+	bucket := &bucket.Bucket{
 		Name:   bucketName,
 		Region: "us-east-1",
 	}
@@ -250,7 +252,7 @@ func TestTenantClient_BucketOperations(t *testing.T) {
 	}
 
 	found := false
-	for _, bucket := range *buckets {
+	for _, bucket := range buckets {
 		if bucket.Name == bucketName {
 			found = true
 			break
@@ -288,22 +290,22 @@ func TestGridClient_HAGroupOperations(t *testing.T) {
 		t.Fatalf("Failed to list HA groups: %v", err)
 	}
 
-	t.Logf("Found %d HA groups", len(*haGroups))
+	t.Logf("Found %d HA groups", len(haGroups))
 
 	// If there are HA groups, test getting details of the first one
-	if len(*haGroups) > 0 {
-		haGroup := (*haGroups)[0]
-		if haGroup.Id != "" {
-			details, err := gridClient.HAGroup().GetById(ctx, haGroup.Id)
+	if len(haGroups) > 0 {
+		haGroup := (haGroups)[0]
+		if haGroup.ID != "" {
+			details, err := gridClient.HAGroup().GetByID(ctx, haGroup.ID)
 			if err != nil {
 				t.Fatalf("Failed to get HA group details: %v", err)
 			}
 
-			if details.Id != haGroup.Id {
-				t.Fatalf("HA group ID mismatch: expected %s, got %s", haGroup.Id, details.Id)
+			if details.ID != haGroup.ID {
+				t.Fatalf("HA group ID mismatch: expected %s, got %s", haGroup.ID, details.ID)
 			}
 
-			t.Logf("Successfully retrieved HA group: %s", details.Id)
+			t.Logf("Successfully retrieved HA group: %s", details.ID)
 		}
 	}
 }

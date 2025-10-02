@@ -1,4 +1,4 @@
-package models
+package health
 
 type Health struct {
 	Alarms *Alarms `json:"alarms,omitempty"` // Details about alarms.

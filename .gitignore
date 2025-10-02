@@ -27,6 +27,7 @@ go.work.sum
 
 # env file
 .env
+setenv.sh
 
 # local tmp dir with generated manifests
 tmp/
