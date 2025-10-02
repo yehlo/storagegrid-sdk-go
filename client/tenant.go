@@ -41,7 +41,7 @@ func NewTenantClient(options ...Option) (*TenantClient, error) {
 		bucket:       bucket.NewService(c),
 		s3AccessKeys: accesskeys.NewService(c),
 		users:        tenantuser.NewService(c),
-		groups:       tenantgroup.NewTenantGroupService(c),
+		groups:       tenantgroup.NewService(c),
 		region:       region.NewTenantService(c),
 	}, nil
 }

@@ -23,16 +23,17 @@ type ServiceInterface interface {
 }
 
 type Service struct {
-	client services.HTTPClient
+	services.HTTPClient
 }
 
+// NewService returns a new tenant service using the provided client
 func NewService(client services.HTTPClient) *Service {
-	return &Service{client: client}
+	return &Service{client}
 }
 
 func (s *Service) List(ctx context.Context) ([]Tenant, error) {
 	var response models.Response[[]Tenant]
-	err := s.client.DoParsed(ctx, "GET", tenantEndpoint, nil, &response)
+	err := s.DoParsed(ctx, "GET", tenantEndpoint, nil, &response)
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +43,7 @@ func (s *Service) List(ctx context.Context) ([]Tenant, error) {
 
 func (s *Service) GetByID(ctx context.Context, id string) (*Tenant, error) {
 	var response models.Response[*Tenant]
-	err := s.client.DoParsed(ctx, "GET", tenantEndpoint+"/"+id, nil, &response)
+	err := s.DoParsed(ctx, "GET", tenantEndpoint+"/"+id, nil, &response)
 	if err != nil {
 		return nil, err
 	}
@@ -52,7 +53,7 @@ func (s *Service) GetByID(ctx context.Context, id string) (*Tenant, error) {
 
 func (s *Service) Create(ctx context.Context, tenant *Tenant) (*Tenant, error) {
 	var response models.Response[*Tenant]
-	err := s.client.DoParsed(ctx, "POST", tenantEndpoint, tenant, &response)
+	err := s.DoParsed(ctx, "POST", tenantEndpoint, tenant, &response)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +63,7 @@ func (s *Service) Create(ctx context.Context, tenant *Tenant) (*Tenant, error) {
 
 func (s *Service) Update(ctx context.Context, tenant *Tenant) (*Tenant, error) {
 	var response models.Response[*Tenant]
-	err := s.client.DoParsed(ctx, "PUT", tenantEndpoint+"/"+tenant.ID, tenant, &response)
+	err := s.DoParsed(ctx, "PUT", tenantEndpoint+"/"+tenant.ID, tenant, &response)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +72,7 @@ func (s *Service) Update(ctx context.Context, tenant *Tenant) (*Tenant, error) {
 }
 
 func (s *Service) Delete(ctx context.Context, id string) error {
-	err := s.client.DoParsed(ctx, "DELETE", tenantEndpoint+"/"+id, nil, nil)
+	err := s.DoParsed(ctx, "DELETE", tenantEndpoint+"/"+id, nil, nil)
 	if err != nil {
 		return err
 	}
@@ -82,7 +83,7 @@ func (s *Service) Delete(ctx context.Context, id string) error {
 func (s *Service) GetUsage(ctx context.Context, id string) (*tenantusage.TenantUsage, error) {
 	var response models.Response[*tenantusage.TenantUsage]
 
-	err := s.client.DoParsed(ctx, "GET", tenantEndpoint+"/"+id+"/usage", nil, &response)
+	err := s.DoParsed(ctx, "GET", tenantEndpoint+"/"+id+"/usage", nil, &response)
 	if err != nil {
 		return nil, err
 	}

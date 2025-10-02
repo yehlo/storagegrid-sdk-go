@@ -18,21 +18,21 @@ type ServiceInterface interface {
 }
 
 type Service struct {
-	client   services.HTTPClient
+	services.HTTPClient
 	endpoint string
 }
 
 func NewGridService(client services.HTTPClient) *Service {
-	return &Service{client: client, endpoint: gridRegionEndpoint}
+	return &Service{HTTPClient: client, endpoint: gridRegionEndpoint}
 }
 
 func NewTenantService(client services.HTTPClient) *Service {
-	return &Service{client: client, endpoint: tenantRegionEndpoint}
+	return &Service{HTTPClient: client, endpoint: tenantRegionEndpoint}
 }
 
 func (s *Service) List(ctx context.Context) ([]string, error) {
 	var response models.Response[[]string]
-	if err := s.client.DoParsed(ctx, "GET", s.endpoint, nil, &response); err != nil {
+	if err := s.DoParsed(ctx, "GET", s.endpoint, nil, &response); err != nil {
 		return nil, err
 	}
 

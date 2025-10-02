@@ -21,16 +21,17 @@ type ServiceInterface interface {
 }
 
 type Service struct {
-	client services.HTTPClient
+	services.HTTPClient
 }
 
+// NewService returns a new hagroup service using the provided client
 func NewService(client services.HTTPClient) *Service {
-	return &Service{client: client}
+	return &Service{client}
 }
 
 func (s *Service) List(ctx context.Context) ([]HAGroup, error) {
 	var response models.Response[[]HAGroup]
-	if err := s.client.DoParsed(ctx, "GET", endpoint, nil, &response); err != nil {
+	if err := s.DoParsed(ctx, "GET", endpoint, nil, &response); err != nil {
 		return nil, err
 	}
 
@@ -39,7 +40,7 @@ func (s *Service) List(ctx context.Context) ([]HAGroup, error) {
 
 func (s *Service) GetByID(ctx context.Context, id string) (*HAGroup, error) {
 	var response models.Response[*HAGroup]
-	if err := s.client.DoParsed(ctx, "GET", endpoint+"/"+id, nil, &response); err != nil {
+	if err := s.DoParsed(ctx, "GET", endpoint+"/"+id, nil, &response); err != nil {
 		return nil, err
 	}
 
@@ -48,7 +49,7 @@ func (s *Service) GetByID(ctx context.Context, id string) (*HAGroup, error) {
 
 func (s *Service) Create(ctx context.Context, hagroup *HAGroup) (*HAGroup, error) {
 	var response models.Response[*HAGroup]
-	if err := s.client.DoParsed(ctx, "POST", endpoint, hagroup, &response); err != nil {
+	if err := s.DoParsed(ctx, "POST", endpoint, hagroup, &response); err != nil {
 		return nil, err
 	}
 
@@ -57,7 +58,7 @@ func (s *Service) Create(ctx context.Context, hagroup *HAGroup) (*HAGroup, error
 
 func (s *Service) Update(ctx context.Context, hagroup *HAGroup) (*HAGroup, error) {
 	var response models.Response[*HAGroup]
-	if err := s.client.DoParsed(ctx, "PUT", endpoint+"/"+hagroup.ID, hagroup, &response); err != nil {
+	if err := s.DoParsed(ctx, "PUT", endpoint+"/"+hagroup.ID, hagroup, &response); err != nil {
 		return nil, err
 	}
 
@@ -65,5 +66,5 @@ func (s *Service) Update(ctx context.Context, hagroup *HAGroup) (*HAGroup, error
 }
 
 func (s *Service) Delete(ctx context.Context, id string) error {
-	return s.client.DoParsed(ctx, "DELETE", endpoint+"/"+id, nil, nil)
+	return s.DoParsed(ctx, "DELETE", endpoint+"/"+id, nil, nil)
 }

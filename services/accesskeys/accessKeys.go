@@ -15,12 +15,12 @@ const (
 
 // ServiceInterface defines the contract for S3 access key service operations
 type ServiceInterface interface {
-	ListForCurrentUser(ctx context.Context) ([]S3AccessKey, error)
-	ListForUser(ctx context.Context, userID string) ([]S3AccessKey, error)
-	GetByIDForCurrentUser(ctx context.Context, id string) (*S3AccessKey, error)
-	GetByIDForUser(ctx context.Context, userID string, id string) (*S3AccessKey, error)
-	CreateForCurrentUser(ctx context.Context, s3AccessKey *S3AccessKey) (*S3AccessKey, error)
-	CreateForUser(ctx context.Context, userID string, s3AccessKey *S3AccessKey) (*S3AccessKey, error)
+	ListForCurrentUser(ctx context.Context) ([]AccessKey, error)
+	ListForUser(ctx context.Context, userID string) ([]AccessKey, error)
+	GetByIDForCurrentUser(ctx context.Context, id string) (*AccessKey, error)
+	GetByIDForUser(ctx context.Context, userID string, id string) (*AccessKey, error)
+	CreateForCurrentUser(ctx context.Context, s3AccessKey *AccessKey) (*AccessKey, error)
+	CreateForUser(ctx context.Context, userID string, s3AccessKey *AccessKey) (*AccessKey, error)
 	DeleteForCurrentUser(ctx context.Context, id string) error
 	DeleteForUser(ctx context.Context, userID string, id string) error
 }
@@ -30,71 +30,80 @@ func getUsersEndpoint(userID string) string {
 }
 
 type Service struct {
-	client services.HTTPClient
+	services.HTTPClient
 }
 
+// NewService returns a new accesskey service using the provided client
 func NewService(client services.HTTPClient) *Service {
-	return &Service{client: client}
+	return &Service{client}
 }
 
-func (s *Service) ListForCurrentUser(ctx context.Context) ([]S3AccessKey, error) {
-	var response models.Response[[]S3AccessKey]
-	if err := s.client.DoParsed(ctx, "GET", currentUsersEndpoint, nil, &response); err != nil {
+// ListForCurrentUser lists all access keys for the current user
+func (s *Service) ListForCurrentUser(ctx context.Context) ([]AccessKey, error) {
+	var response models.Response[[]AccessKey]
+	if err := s.DoParsed(ctx, "GET", currentUsersEndpoint, nil, &response); err != nil {
 		return nil, err
 	}
 
 	return response.Data, nil
 }
 
-func (s *Service) ListForUser(ctx context.Context, userID string) ([]S3AccessKey, error) {
-	var response models.Response[[]S3AccessKey]
-	if err := s.client.DoParsed(ctx, "GET", getUsersEndpoint(userID), nil, &response); err != nil {
+// ListForUser lists all access keys for the given user id
+func (s *Service) ListForUser(ctx context.Context, userID string) ([]AccessKey, error) {
+	var response models.Response[[]AccessKey]
+	if err := s.DoParsed(ctx, "GET", getUsersEndpoint(userID), nil, &response); err != nil {
 		return nil, err
 	}
 
 	return response.Data, nil
 }
 
-func (s *Service) GetByIDForCurrentUser(ctx context.Context, id string) (*S3AccessKey, error) {
-	var response models.Response[*S3AccessKey]
-	if err := s.client.DoParsed(ctx, "GET", currentUsersEndpoint+"/"+id, nil, &response); err != nil {
+// GetByIDForCurrentUser retrieves the access key specified for the current user
+func (s *Service) GetByIDForCurrentUser(ctx context.Context, id string) (*AccessKey, error) {
+	var response models.Response[*AccessKey]
+	if err := s.DoParsed(ctx, "GET", currentUsersEndpoint+"/"+id, nil, &response); err != nil {
 		return nil, err
 	}
 
 	return response.Data, nil
 }
 
-func (s *Service) GetByIDForUser(ctx context.Context, userID string, id string) (*S3AccessKey, error) {
-	var response models.Response[*S3AccessKey]
-	if err := s.client.DoParsed(ctx, "GET", getUsersEndpoint(userID)+"/"+id, nil, &response); err != nil {
+// GetByIDForUser retrieves the access key specified for the given user id
+func (s *Service) GetByIDForUser(ctx context.Context, userID string, id string) (*AccessKey, error) {
+	var response models.Response[*AccessKey]
+	if err := s.DoParsed(ctx, "GET", getUsersEndpoint(userID)+"/"+id, nil, &response); err != nil {
 		return nil, err
 	}
 
 	return response.Data, nil
 }
 
-func (s *Service) CreateForCurrentUser(ctx context.Context, s3AccessKey *S3AccessKey) (*S3AccessKey, error) {
-	var response models.Response[*S3AccessKey]
-	if err := s.client.DoParsed(ctx, "POST", currentUsersEndpoint, s3AccessKey, &response); err != nil {
+// CreateForCurrentUser creates a new access key for the current user
+func (s *Service) CreateForCurrentUser(ctx context.Context, s3AccessKey *AccessKey) (*AccessKey, error) {
+	var response models.Response[*AccessKey]
+	if err := s.DoParsed(ctx, "POST", currentUsersEndpoint, s3AccessKey, &response); err != nil {
 		return nil, err
 	}
 
 	return response.Data, nil
 }
 
-func (s *Service) CreateForUser(ctx context.Context, userID string, s3AccessKey *S3AccessKey) (*S3AccessKey, error) {
-	var response models.Response[*S3AccessKey]
-	if err := s.client.DoParsed(ctx, "POST", getUsersEndpoint(userID), s3AccessKey, &response); err != nil {
+// CreateForUser creates a new access key for the given user id
+func (s *Service) CreateForUser(ctx context.Context, userID string, accessKey *AccessKey) (*AccessKey, error) {
+	var response models.Response[*AccessKey]
+	if err := s.DoParsed(ctx, "POST", getUsersEndpoint(userID), accessKey, &response); err != nil {
 		return nil, err
 	}
 
 	return response.Data, nil
 }
 
+// DeleteForCurrentUser deletes the access key specified for the current user
 func (s *Service) DeleteForCurrentUser(ctx context.Context, id string) error {
-	return s.client.DoParsed(ctx, "DELETE", currentUsersEndpoint+"/"+id, nil, nil)
+	return s.DoParsed(ctx, "DELETE", currentUsersEndpoint+"/"+id, nil, nil)
 }
 
+// DeleteForUser deletes the access key specified for the given user id
 func (s *Service) DeleteForUser(ctx context.Context, userID string, id string) error {
-	return s.client.DoParsed(ctx, "DELETE", getUsersEndpoint(userID)+"/"+id, nil, nil)
+	return s.DoParsed(ctx, "DELETE", getUsersEndpoint(userID)+"/"+id, nil, nil)
 }

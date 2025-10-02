@@ -23,16 +23,17 @@ type ServiceInterface interface {
 }
 
 type Service struct {
-	client services.HTTPClient
+	services.HTTPClient
 }
 
-func NewTenantGroupService(client services.HTTPClient) *Service {
-	return &Service{client: client}
+// NewService returns a new tenantgroup service using the provided client
+func NewService(client services.HTTPClient) *Service {
+	return &Service{client}
 }
 
 func (s *Service) List(ctx context.Context) ([]TenantGroup, error) {
 	var response models.Response[[]TenantGroup]
-	if err := s.client.DoParsed(ctx, "GET", tenantGroupEndpoint, nil, &response); err != nil {
+	if err := s.DoParsed(ctx, "GET", tenantGroupEndpoint, nil, &response); err != nil {
 		return nil, err
 	}
 
@@ -41,7 +42,7 @@ func (s *Service) List(ctx context.Context) ([]TenantGroup, error) {
 
 func (s *Service) GetByID(ctx context.Context, id string) (*TenantGroup, error) {
 	var response models.Response[*TenantGroup]
-	if err := s.client.DoParsed(ctx, "GET", tenantGroupEndpoint+"/"+id, nil, &response); err != nil {
+	if err := s.DoParsed(ctx, "GET", tenantGroupEndpoint+"/"+id, nil, &response); err != nil {
 		return nil, err
 	}
 
@@ -50,7 +51,7 @@ func (s *Service) GetByID(ctx context.Context, id string) (*TenantGroup, error) 
 
 func (s *Service) GetByName(ctx context.Context, name string) (*TenantGroup, error) {
 	var response models.Response[*TenantGroup]
-	if err := s.client.DoParsed(ctx, "GET", tenantGroupEndpoint+"/group/"+name, nil, &response); err != nil {
+	if err := s.DoParsed(ctx, "GET", tenantGroupEndpoint+"/group/"+name, nil, &response); err != nil {
 		return nil, err
 	}
 
@@ -64,7 +65,7 @@ func (s *Service) Create(ctx context.Context, group *TenantGroup) (*TenantGroup,
 	}
 
 	var response models.Response[*TenantGroup]
-	if err := s.client.DoParsed(ctx, "POST", tenantGroupEndpoint, group, &response); err != nil {
+	if err := s.DoParsed(ctx, "POST", tenantGroupEndpoint, group, &response); err != nil {
 		return nil, err
 	}
 
@@ -73,7 +74,7 @@ func (s *Service) Create(ctx context.Context, group *TenantGroup) (*TenantGroup,
 
 func (s *Service) Update(ctx context.Context, group *TenantGroup) (*TenantGroup, error) {
 	var response models.Response[*TenantGroup]
-	if err := s.client.DoParsed(ctx, "PUT", tenantGroupEndpoint+"/"+*group.ID, group, &response); err != nil {
+	if err := s.DoParsed(ctx, "PUT", tenantGroupEndpoint+"/"+*group.ID, group, &response); err != nil {
 		return nil, err
 	}
 
@@ -81,5 +82,5 @@ func (s *Service) Update(ctx context.Context, group *TenantGroup) (*TenantGroup,
 }
 
 func (s *Service) Delete(ctx context.Context, id string) error {
-	return s.client.DoParsed(ctx, "DELETE", tenantGroupEndpoint+"/"+id, nil, nil)
+	return s.DoParsed(ctx, "DELETE", tenantGroupEndpoint+"/"+id, nil, nil)
 }

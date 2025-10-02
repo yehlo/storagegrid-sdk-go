@@ -1,4 +1,4 @@
-package trafficclasses
+package trafficclass
 
 import (
 	"context"
@@ -22,16 +22,17 @@ type ServiceInterface interface {
 }
 
 type Service struct {
-	client services.HTTPClient
+	services.HTTPClient
 }
 
+// NewService returns a new trafficclass service using the provided client
 func NewService(client services.HTTPClient) *Service {
-	return &Service{client: client}
+	return &Service{client}
 }
 
 func (s *Service) List(ctx context.Context) ([]TrafficClass, error) {
 	var response models.Response[[]TrafficClass]
-	if err := s.client.DoParsed(ctx, http.MethodGet, endpoint, nil, &response); err != nil {
+	if err := s.DoParsed(ctx, http.MethodGet, endpoint, nil, &response); err != nil {
 		return nil, err
 	}
 
@@ -40,7 +41,7 @@ func (s *Service) List(ctx context.Context) ([]TrafficClass, error) {
 
 func (s *Service) CreatePolicy(ctx context.Context, tenant *Policy) (*Policy, error) {
 	var response models.Response[*Policy]
-	if err := s.client.DoParsed(ctx, http.MethodPost, endpoint, tenant, &response); err != nil {
+	if err := s.DoParsed(ctx, http.MethodPost, endpoint, tenant, &response); err != nil {
 		return nil, err
 	}
 

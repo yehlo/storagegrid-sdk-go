@@ -26,16 +26,17 @@ type ServiceInterface interface {
 }
 
 type Service struct {
-	client services.HTTPClient
+	services.HTTPClient
 }
 
+// NewService returns a new bucket service using the provided client
 func NewService(client services.HTTPClient) *Service {
-	return &Service{client: client}
+	return &Service{client}
 }
 
 func (s *Service) List(ctx context.Context) ([]Bucket, error) {
 	var response models.Response[[]Bucket]
-	err := s.client.DoParsed(ctx, "GET", bucketEndpoint, nil, &response)
+	err := s.DoParsed(ctx, "GET", bucketEndpoint, nil, &response)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +62,7 @@ func (s *Service) GetByName(ctx context.Context, name string) (*Bucket, error) {
 
 func (s *Service) Create(ctx context.Context, bucket *Bucket) (*Bucket, error) {
 	var response models.Response[*Bucket]
-	if err := s.client.DoParsed(ctx, "POST", bucketEndpoint, bucket, &response); err != nil {
+	if err := s.DoParsed(ctx, "POST", bucketEndpoint, bucket, &response); err != nil {
 		return nil, err
 	}
 
@@ -70,7 +71,7 @@ func (s *Service) Create(ctx context.Context, bucket *Bucket) (*Bucket, error) {
 
 func (s *Service) GetUsage(ctx context.Context, name string) (*tenantusage.BucketStats, error) {
 	var response models.Response[tenantusage.TenantUsage]
-	if err := s.client.DoParsed(ctx, "GET", tenantUsageEndpoint, nil, &response); err != nil {
+	if err := s.DoParsed(ctx, "GET", tenantUsageEndpoint, nil, &response); err != nil {
 		return nil, err
 	}
 
@@ -84,7 +85,7 @@ func (s *Service) GetUsage(ctx context.Context, name string) (*tenantusage.Bucke
 }
 
 func (s *Service) Delete(ctx context.Context, name string) error {
-	return s.client.DoParsed(ctx, "DELETE", bucketEndpoint+"/"+name, nil, nil)
+	return s.DoParsed(ctx, "DELETE", bucketEndpoint+"/"+name, nil, nil)
 }
 
 // Drain a bucket by name. This will delete all objects in the bucket but leave the bucket itself intact.
@@ -92,7 +93,7 @@ func (s *Service) Drain(ctx context.Context, name string) (*DeleteObjectStatus, 
 	var response models.Response[*DeleteObjectStatus]
 	body := map[string]string{"deleteObjects": "true"}
 
-	if err := s.client.DoParsed(ctx, "POST", bucketEndpoint+"/"+name+"/delete-objects", body, &response); err != nil {
+	if err := s.DoParsed(ctx, "POST", bucketEndpoint+"/"+name+"/delete-objects", body, &response); err != nil {
 		return nil, err
 	}
 
@@ -102,7 +103,7 @@ func (s *Service) Drain(ctx context.Context, name string) (*DeleteObjectStatus, 
 func (s *Service) DrainStatus(ctx context.Context, name string) (*DeleteObjectStatus, error) {
 	var response models.Response[*DeleteObjectStatus]
 
-	if err := s.client.DoParsed(ctx, "GET", bucketEndpoint+"/"+name+"/delete-objects", nil, &response); err != nil {
+	if err := s.DoParsed(ctx, "GET", bucketEndpoint+"/"+name+"/delete-objects", nil, &response); err != nil {
 		return nil, err
 	}
 

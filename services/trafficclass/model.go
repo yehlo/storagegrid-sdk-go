@@ -1,4 +1,4 @@
-package trafficclasses
+package trafficclass
 
 type TrafficClass struct {
 	ID          string  `json:"id"`                    // a unique identifier for the traffic class (automatically assigned when a traffic class is created)
@@ -21,20 +21,20 @@ type Matchers struct {
 }
 
 type Limits struct {
-	Type  TrafficClassLimit `json:"type"`
-	Value int               `json:"value"`
+	Type  Limit `json:"type"`
+	Value int   `json:"value"`
 }
 
-type TrafficClassLimit string
+type Limit string
 
 // Possible TrafficClassLimits
 const (
-	AggregateBandwidthIn    TrafficClassLimit = "aggregateBandwidthIn"
-	AggregateBandwidthOut   TrafficClassLimit = "aggregateBandwidthOut"
-	ConcurrentReadRequests  TrafficClassLimit = "concurrentReadRequests"
-	ConcurrentWriteRequests TrafficClassLimit = "concurrentWriteRequests"
-	ReadRequestRate         TrafficClassLimit = "readRequestRate"
-	WriteRequestRate        TrafficClassLimit = "writeRequestRate"
-	PerRequestBandwidthIn   TrafficClassLimit = "perRequestBandwidthIn"
-	PerRequestBandwidthOut  TrafficClassLimit = "perRequestBandwidthOut"
+	AggregateBandwidthIn    Limit = "aggregateBandwidthIn"
+	AggregateBandwidthOut   Limit = "aggregateBandwidthOut"
+	ConcurrentReadRequests  Limit = "concurrentReadRequests"
+	ConcurrentWriteRequests Limit = "concurrentWriteRequests"
+	ReadRequestRate         Limit = "readRequestRate"
+	WriteRequestRate        Limit = "writeRequestRate"
+	PerRequestBandwidthIn   Limit = "perRequestBandwidthIn"
+	PerRequestBandwidthOut  Limit = "perRequestBandwidthOut"
 )

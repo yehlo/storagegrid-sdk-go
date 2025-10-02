@@ -17,16 +17,17 @@ type ServiceInterface interface {
 }
 
 type Service struct {
-	client services.HTTPClient
+	services.HTTPClient
 }
 
+// NewService returns a new health service using the provided client
 func NewService(client services.HTTPClient) *Service {
-	return &Service{client: client}
+	return &Service{client}
 }
 
 func (s *Service) Get(ctx context.Context) (*Health, error) {
 	var response models.Response[*Health]
-	if err := s.client.DoParsed(ctx, "GET", healthEndpoint, nil, &response); err != nil {
+	if err := s.DoParsed(ctx, "GET", healthEndpoint, nil, &response); err != nil {
 		return nil, err
 	}
 

@@ -24,16 +24,17 @@ type ServiceInterface interface {
 }
 
 type Service struct {
-	client services.HTTPClient
+	services.HTTPClient
 }
 
+// NewService returns a new tenantuser service using the provided client
 func NewService(client services.HTTPClient) *Service {
-	return &Service{client: client}
+	return &Service{client}
 }
 
 func (s *Service) List(ctx context.Context) ([]User, error) {
 	var response models.Response[[]User]
-	if err := s.client.DoParsed(ctx, "GET", endpoint, nil, &response); err != nil {
+	if err := s.DoParsed(ctx, "GET", endpoint, nil, &response); err != nil {
 		return nil, err
 	}
 
@@ -42,7 +43,7 @@ func (s *Service) List(ctx context.Context) ([]User, error) {
 
 func (s *Service) GetByID(ctx context.Context, id string) (*User, error) {
 	var response models.Response[*User]
-	if err := s.client.DoParsed(ctx, "GET", endpoint+"/"+id, nil, &response); err != nil {
+	if err := s.DoParsed(ctx, "GET", endpoint+"/"+id, nil, &response); err != nil {
 		return nil, err
 	}
 
@@ -51,7 +52,7 @@ func (s *Service) GetByID(ctx context.Context, id string) (*User, error) {
 
 func (s *Service) GetByName(ctx context.Context, name string) (*User, error) {
 	var response models.Response[*User]
-	if err := s.client.DoParsed(ctx, "GET", endpoint+"/user/"+name, nil, &response); err != nil {
+	if err := s.DoParsed(ctx, "GET", endpoint+"/user/"+name, nil, &response); err != nil {
 		return nil, err
 	}
 
@@ -65,7 +66,7 @@ func (s *Service) Create(ctx context.Context, user *User) (*User, error) {
 	}
 
 	var response models.Response[*User]
-	if err := s.client.DoParsed(ctx, "POST", endpoint, user, &response); err != nil {
+	if err := s.DoParsed(ctx, "POST", endpoint, user, &response); err != nil {
 		return nil, err
 	}
 
@@ -74,7 +75,7 @@ func (s *Service) Create(ctx context.Context, user *User) (*User, error) {
 
 func (s *Service) Update(ctx context.Context, user *User) (*User, error) {
 	var response models.Response[*User]
-	if err := s.client.DoParsed(ctx, "PUT", endpoint+"/"+*user.ID, user, &response); err != nil {
+	if err := s.DoParsed(ctx, "PUT", endpoint+"/"+*user.ID, user, &response); err != nil {
 		return nil, err
 	}
 
@@ -82,10 +83,10 @@ func (s *Service) Update(ctx context.Context, user *User) (*User, error) {
 }
 
 func (s *Service) Delete(ctx context.Context, id string) error {
-	return s.client.DoParsed(ctx, "DELETE", endpoint+"/"+id, nil, nil)
+	return s.DoParsed(ctx, "DELETE", endpoint+"/"+id, nil, nil)
 }
 
 func (s *Service) SetPassword(ctx context.Context, id string, password string) error {
 	data := map[string]string{"password": password}
-	return s.client.DoParsed(ctx, "POST", endpoint+"/"+id+"/change-password", data, nil)
+	return s.DoParsed(ctx, "POST", endpoint+"/"+id+"/change-password", data, nil)
 }

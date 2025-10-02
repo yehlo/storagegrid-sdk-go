@@ -1,6 +1,6 @@
-package gatewayconfig
+package gateway
 
-type GatewayConfig struct {
+type Config struct {
 	// ID is the unique identifier of the load balancer endpoint.
 	ID string `json:"id,omitempty"`
 	// Name is the name of the load balancer endpoint.
@@ -33,7 +33,7 @@ type ManagementInterfaces struct {
 	EnableTenantManager *bool `json:"enableTenantManager,omitempty"`
 }
 
-type GWServerConfig struct {
+type ServerConfig struct {
 	DefaultServiceType     *string            `json:"defaultServiceType,omitempty"`
 	AccountRestrictionMode *string            `json:"accountRestrictionMode,omitempty"`
 	AccountRestrictions    []string           `json:"accountRestrictions,omitempty"`
