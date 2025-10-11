@@ -414,7 +414,7 @@ func TestIntegration(t *testing.T) {
 		t.Fatalf("Failed to get health: %v", err)
 	}
 
-	t.Logf("Grid health status: operative=%v", health.Operative())
+	t.Logf("Grid health status: operative=%v", health.Operative(1))
 }
 ```
 

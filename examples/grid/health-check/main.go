@@ -54,7 +54,7 @@ func main() {
 	fmt.Printf("\n📊 Grid Health Summary:\n")
 	fmt.Printf("  Overall Status: %s\n", getHealthStatus(health))
 	fmt.Printf("  All Systems Green: %v\n", health.AllGreen())
-	fmt.Printf("  Operationally Ready: %v\n", health.Operative())
+	fmt.Printf("  Operationally Ready: %v\n", health.Operative(1))
 
 	// Display node information
 	if health.Nodes != nil {
@@ -105,7 +105,7 @@ func main() {
 	fmt.Printf("\n💡 Recommendations:\n")
 	if health.AllGreen() {
 		fmt.Printf("  ✅ Grid is healthy - no action required\n")
-	} else if health.Operative() {
+	} else if health.Operative(1) {
 		fmt.Printf("  ⚠️  Grid is operational but has some issues - monitor closely\n")
 	} else {
 		fmt.Printf("  🚨 Grid has significant issues - immediate attention required\n")
@@ -115,7 +115,7 @@ func main() {
 func getHealthStatus(health *models.Health) string {
 	if health.AllGreen() {
 		return "✅ Healthy"
-	} else if health.Operative() {
+	} else if health.Operative(1) {
 		return "⚠️  Operational with Issues"
 	} else {
 		return "🚨 Critical Issues"

@@ -65,13 +65,8 @@ func (h *Health) AllGreen() bool {
 
 // Operative checks if the system is operational:
 // 1. No Major alarms or alerts.
-// 2. At most 1 node is not connected.
-func (h *Health) Operative() bool {
-	// Nolonger checking for alarms, as it is being deprecated.
-	// if h.Alarms != nil && !isZero(h.Alarms.Major) {
-	// 	return false
-	// }
-
+// 2. Node connectivity is within acceptable limits (maxUnavailable).
+func (h *Health) Operative(maxUnavailable int) bool {
 	// Check for no major alerts.
 	if h.Alerts != nil && !isZero(h.Alerts.Major) {
 		return false
@@ -80,7 +75,7 @@ func (h *Health) Operative() bool {
 	// Check for node connectivity.
 	if h.Nodes != nil {
 		notConnected := getValue(h.Nodes.AdministrativelyDown) + getValue(h.Nodes.Unknown)
-		if notConnected > 1 {
+		if notConnected > maxUnavailable {
 			return false
 		}
 	}
