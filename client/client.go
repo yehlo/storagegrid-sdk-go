@@ -7,7 +7,6 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 	"slices"
@@ -81,7 +80,7 @@ func newClient(options ...Option) (*Client, error) {
 		return nil, fmt.Errorf("no endpoint set")
 	}
 
-	var transCfg = &http.Transport{
+	transCfg := &http.Transport{
 		Proxy:           http.ProxyFromEnvironment,
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: c.skipSSL}, // #nosec G402
 	}
@@ -104,9 +103,8 @@ func (c *Client) authorize(ctx context.Context) error {
 		return err
 	}
 
-	token := &models.AuthorizationToken{}
-	err = c.parseResponse(resp, token)
-	if err != nil {
+	var token models.AuthorizationToken
+	if err := c.parseResponse(resp, &token); err != nil {
 		return err
 	}
 
@@ -146,8 +144,7 @@ func (c *Client) newRequest(ctx context.Context, method string, path string, bod
 	if !slices.Contains(implementedAuthorizeEndpoints, path) {
 		// If there's no token yet or it's expired, authorize
 		if c.token == "" || time.Now().After(c.tokenExpires) {
-			err = c.authorize(ctx)
-			if err != nil {
+			if err := c.authorize(ctx); err != nil {
 				return nil, err
 			}
 		}
@@ -164,18 +161,7 @@ func (c *Client) newRequest(ctx context.Context, method string, path string, bod
 
 func (c *Client) parseResponse(resp *http.Response, resourceType any) error {
 	defer resp.Body.Close()
-
-	respBody, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return fmt.Errorf("failed to read response: %w", err)
-	}
-
-	err = json.Unmarshal(respBody, &resourceType)
-	if err != nil {
-		return fmt.Errorf("failed to parse response: %w", err)
-	}
-
-	return nil
+	return json.NewDecoder(resp.Body).Decode(&resourceType)
 }
 
 // DoUnparsed can be used to call the API, returning the http.Response
