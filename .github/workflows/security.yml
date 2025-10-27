@@ -82,7 +82,7 @@ jobs:
         govulncheck -json ./... > govulncheck-results.json 2>&1 || true
     
     - name: Upload vulnerability report
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: vulnerability-report
         path: govulncheck-results.json
