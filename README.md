@@ -1,5 +1,20 @@
 # StorageGRID SDK for Go
 
+> **🚨 REPOSITORY MOVED**
+> 
+> **This repository is no longer actively maintained.**
+> 
+> Development has moved to: **[bedag/storagegrid-sdk-go](https://github.com/bedag/storagegrid-sdk-go)**
+> 
+> Please use the new repository for:
+> - 🐛 Bug reports and issues
+> - ✨ Feature requests
+> - 🔄 Pull requests
+> - 📦 Latest releases and updates
+ 
+---
+
+
 [![Go Reference](https://pkg.go.dev/badge/github.com/yehlo/storagegrid-sdk-go.svg)](https://pkg.go.dev/github.com/yehlo/storagegrid-sdk-go)
 [![Go Report Card](https://goreportcard.com/badge/github.com/yehlo/storagegrid-sdk-go)](https://goreportcard.com/report/github.com/yehlo/storagegrid-sdk-go)
 
