@@ -155,7 +155,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v3
       with:
-        go-version: 1.23
+        go-version: 1.25
     
     - name: Run Integration Tests
       env:

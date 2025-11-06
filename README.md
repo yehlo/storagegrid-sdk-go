@@ -55,7 +55,7 @@ This SDK reflects this architecture with corresponding client types. For more de
 - **SSL configuration**: Optional SSL verification skip for development environments
 
 ## Requirements
-- Go 1.23.5 or newer (see `go.mod` for the exact version)
+- Go 1.25 or newer (see `go.mod` for the exact version)
 - Access to a NetApp StorageGRID instance with appropriate credentials
 
 ## Installation
